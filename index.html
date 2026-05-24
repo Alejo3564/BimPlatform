@@ -1886,29 +1886,42 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text-primary);min-
 /* Nom layout: form left + lookup right */
 .app-nom .nom-header { display:none }
 
-/* ── Outer wrapper: form area on top, lookup panel at bottom ── */
-.app-nom .layout {
-  display:grid;
-  grid-template-rows: 1fr auto;
-  grid-template-columns: 1fr;
-  height:calc(100vh - 108px);
-  overflow:hidden;
-  gap:0;
+/* ── Nom: 2-column grid: form left, right-col right ── */
+.app-nom .nom-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  height: calc(100vh - 108px);
+  overflow: hidden;
 }
 
-/* ── Inner nom layout: form (smaller) + file panel ── */
-.app-nom .layout > .layout {
-  display:grid;
-  grid-template-columns: 380px 1fr;
-  grid-template-rows: 1fr;
-  overflow:hidden;
-  border-bottom:2px solid #DDC8BC;
-}
+/* ── Left: form panel — full height, scrollable ── */
 .app-nom .form-panel {
-  overflow-y:auto;
-  height:100%;
-  border-right:1px solid #DDC8BC;
-  min-width:0;
+  overflow-y: auto;
+  height: 100%;
+  border-right: 2px solid #DDC8BC;
+  background: #F7F3F0;
+}
+
+/* ── Right: flex column → files top, lookup bottom ── */
+.app-nom .nom-right-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-nom .files-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.app-nom .files-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 /* ══ LOOKUP PANEL ══ */
@@ -1918,7 +1931,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text-primary);min-
   flex-direction:column;
   border-top:2px solid #E07B22;
   flex-shrink:0;
-  max-height:340px;
+  max-height:320px;
 }
 .lookup-header {
   background:var(--egis-dark);
@@ -1998,9 +2011,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text-primary);min-
   color:#A48060;font-family:'JetBrains Mono',monospace;
 }
 
-/* Override conflicting bare .layout rule from nom */
-.app-nom .layout { height: calc(100vh - 108px) !important; }
-.app-nom .layout > .layout { height: 100% !important; grid-template-columns: 380px 1fr !important; }
 </style>
 </head>
 <body>
@@ -2203,11 +2213,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text-primary);min-
 </div>
 
 <div class="app-view app-nom hidden" id="app-nom">
-  <div class="layout">
-    <div class="layout">
-
-  <!-- LEFT: FORM -->
-  <div class="form-panel">
+  <div class="nom-grid">
+    <div class="form-panel">
 
     <!-- PREVIEW -->
     <div class="name-preview">
@@ -2442,9 +2449,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text-primary);min-
     </button>
 
   </div>
-
-  <!-- RIGHT: FILES -->
-  <div class="files-panel">
+    <div class="nom-right-col">
+      <div class="files-panel">
     <div class="files-toolbar">
       <button class="btn btn-primary" onclick="openFolder()">📂 Abrir Carpeta</button>
       <div class="toolbar-sep"></div>
@@ -2470,20 +2476,18 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text-primary);min-
       <span id="renameResultText">—</span>
     </div>
   </div>
-</div>
-
-<!-- Hidden folder input -->
+      <!-- Hidden folder input -->
 <input type="file" id="folderInput" webkitdirectory multiple style="display:none" onchange="handleFolderInput(event)">
 
 <!-- Toast -->
 <div id="toast"></div>
-    <!-- ══ ACRONYM LOOKUP PANEL ══ -->
-    <div class="lookup-panel">
+      <div class="lookup-panel">
       <div class="lookup-header">
         <span class="lookup-title">🔍 Buscador de Acrónimos</span>
         <span class="lookup-hint">Busca por descripción → obtén el código · Clic en código para copiar</span>
       </div>
       <div class="lookup-fields" id="lookupFields"></div>
+    </div>
     </div>
   </div>
 </div>
