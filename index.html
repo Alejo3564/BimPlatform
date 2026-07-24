@@ -2816,10 +2816,10 @@ function buildObj(){
           <span class="elem-code">${esc(el.codigo)}</span>
           <span class="elem-name">${esc(el.elemento)}</span>
           ${logB}
-          <div class="copy-btns" onclick="event.stopPropagation()">
-            <button class="copy-btn" data-objcopy="num" data-objnodeid="${nodeIdx}" title="Copiar código">${objCopyIcon} Código</button>
-            <button class="copy-btn" data-objcopy="desc" data-objnodeid="${nodeIdx}" title="Copiar descripción">${objCopyIcon} Desc.</button>
-            <button class="copy-btn copy-all" data-objcopy="excel" data-objnodeid="${nodeIdx}" title="Copiar código + descripción para Excel">${objCopyIcon} Excel</button>
+          <div class="copy-btns">
+            <button class="copy-btn" onclick="event.stopPropagation();objCopyByIdx(${nodeIdx},'num')" title="Copiar código">${objCopyIcon} Código</button>
+            <button class="copy-btn" onclick="event.stopPropagation();objCopyByIdx(${nodeIdx},'desc')" title="Copiar descripción">${objCopyIcon} Desc.</button>
+            <button class="copy-btn copy-all" onclick="event.stopPropagation();objCopyByIdx(${nodeIdx},'excel')" title="Copiar código + descripción para Excel">${objCopyIcon} Excel</button>
           </div>
         </div>
         <div class="elem-body">${elemBody(el,fGroups,nodeIdx)}</div>`;
@@ -2843,6 +2843,13 @@ function objCopyExcel(num, desc) {
 function objCopyIfc(ifc) {
   navigator.clipboard.writeText(ifc).then(() => objToast('✓ IFC Type: ' + ifc));
 }
+function objCopyByIdx(idx, type) {
+  const node = objNodeRegistry[idx];
+  if (!node) return;
+  if (type === 'num')   objCopyText(node.codigo, 'Código');
+  if (type === 'desc')  objCopyText(node.descripcion, 'Descripción');
+  if (type === 'excel') objCopyExcel(node.codigo, node.descripcion);
+}
 function objToast(msg) {
   let t = document.getElementById('objToast');
   if (!t) {
@@ -2857,31 +2864,14 @@ function objToast(msg) {
   t._timer = setTimeout(() => { t.style.opacity = '0'; }, 1800);
 }
 
-document.getElementById('discContainer').addEventListener('click', function(e){
-  const btn = e.target.closest('[data-objcopy]');
-  if (btn) {
-    e.stopPropagation();
-    const node = objNodeRegistry[parseInt(btn.dataset.objnodeid)];
-    if (!node) return;
-    const type = btn.dataset.objcopy;
-    if (type === 'num')   objCopyText(node.codigo, 'Código');
-    if (type === 'desc')  objCopyText(node.descripcion, 'Descripción');
-    if (type === 'excel') objCopyExcel(node.codigo, node.descripcion);
-    return;
-  }
-  const ifcBtn = e.target.closest('[data-ifccopy]');
-  if (ifcBtn) {
-    e.stopPropagation();
-    objCopyIfc(ifcBtn.dataset.ifccopy);
-  }
-});
+
 
 function elemBody(el,fGroups,nodeIdx){
   const b=el.bim||{};
   const desc=s(b.full_description), ifc=s(b.ifc_type), log=s(b.log), link=s(b.link_bsdd);
   let h='<div class="detail-grid">';
   if(desc) h+=`<div class="detail-card full"><div class="dc-label">Descripción BIM (LOD)</div><div class="dc-val">${esc(desc)}</div></div>`;
-  if(ifc)  h+=`<div class="detail-card"><div class="dc-label">IFC Type</div><div class="dc-val" style="display:flex;align-items:center;gap:8px"><span class="ifc-tag">${esc(ifc)}</span><button class="copy-btn" data-ifccopy="${esc(ifc)}" title="Copiar IFC Type" style="opacity:1">${objCopyIcon} Copiar</button></div></div>`;
+  if(ifc)  h+=`<div class="detail-card"><div class="dc-label">IFC Type</div><div class="dc-val" style="display:flex;align-items:center;gap:8px"><span class="ifc-tag">${esc(ifc)}</span><button class="copy-btn" onclick="event.stopPropagation();objCopyIfc('${esc(ifc).replace(/'/g,"\\'")}')" title="Copiar IFC Type" style="opacity:1">${objCopyIcon} Copiar</button></div></div>`;
   if(log)  h+=`<div class="detail-card"><div class="dc-label">LOG</div><div class="dc-val"><span class="log-tag">LOG ${parseFloat(log)||log}</span></div></div>`;
   if(link&&link!='nan'){
     const cl=link.replace(/\s+/g,'');
