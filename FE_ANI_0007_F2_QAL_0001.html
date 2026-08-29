@@ -213,6 +213,56 @@ body {
 }
 .reset-btn:hover { background: var(--midnight-050); border-color: var(--midnight-300); }
 
+/* ---------------- Export dropdown ---------------- */
+.export-dropdown { position: relative; }
+.export-btn {
+  border: 1.5px solid var(--vert-600);
+  background: var(--vert-050);
+  color: var(--vert-700);
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  white-space: nowrap;
+}
+.export-btn:hover { background: var(--vert); color: var(--midnight); }
+.chev-inline { font-size: 11px; }
+.export-menu {
+  position: absolute;
+  z-index: 45;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 260px;
+  background: #fff;
+  border: 1px solid var(--midnight-100);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 28px -10px rgba(8,33,44,.28);
+  display: none;
+  overflow: hidden;
+}
+.export-menu.open { display: block; }
+.export-menu div[data-action] {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--grey-050);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.export-menu div[data-action]:last-child { border-bottom: none; }
+.export-menu div[data-action]:hover { background: var(--vert-050); }
+.export-menu .em-title { font-size: 13px; font-weight: 700; color: var(--midnight); }
+.export-menu .em-sub { font-size: 11.5px; color: var(--ink-soft); }
+.export-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--midnight); color: #fff; padding: 10px 18px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s; z-index: 100;
+}
+.export-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 .active-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .pill {
   display: inline-flex; align-items: center; gap: 6px;
@@ -446,6 +496,21 @@ footer.site-footer b { color: var(--midnight); }
         </div>
         <div class="field">
           <button class="reset-btn" id="reset-filters" type="button">↺ Clear filters</button>
+        </div>
+        <div class="field export-field">
+          <div class="export-dropdown" id="export-dropdown">
+            <button class="export-btn" id="export-toggle" type="button">⬇ Export JSON <span class="chev-inline">▾</span></button>
+            <div class="export-menu" id="export-menu">
+              <div data-action="full">
+                <span class="em-title">Export full report</span>
+                <span class="em-sub">All files, checks &amp; elements</span>
+              </div>
+              <div data-action="filtered">
+                <span class="em-title">Export current view</span>
+                <span class="em-sub">Only what matches active filters</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="active-pills" id="active-pills"></div>
@@ -1051,6 +1116,210 @@ footer.site-footer b { color: var(--midnight); }
   });
   document.getElementById('item-sort-asc').addEventListener('click', function () {
     state.itemSort = 'asc'; setItemSortButtons('asc'); renderItemsTable(baseFilteredChecks());
+  });
+
+  // ---------------------------------------------------------------
+  // Export to JSON
+  // ---------------------------------------------------------------
+  function pad(n) { return String(n).length < 2 ? '0' + n : String(n); }
+
+  function timestampSlug() {
+    var d = new Date();
+    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes());
+  }
+
+  function buildSummaryByItem(list) {
+    var byName = {};
+    list.forEach(function (c) { (byName[c.name] = byName[c.name] || []).push(c); });
+    return ITEM_ORDER.filter(function (name) { return byName[name]; }).map(function (name) {
+      var s = computeStats(byName[name]);
+      return {
+        name: name,
+        pass: s.pass,
+        fail: s.fail,
+        na: s.na,
+        evaluated: s.evaluated,
+        pctCompliance: s.pct === null ? null : Math.round(s.pct * 10) / 10
+      };
+    });
+  }
+
+  function checksWithElements(list) {
+    return list.map(function (c) {
+      var key = c.file + '||' + c.checkId;
+      var els = ELEMENTS_BY_KEY[key] || [];
+      return {
+        file: c.file,
+        checkId: c.checkId,
+        name: c.name,
+        description: c.desc,
+        result: c.result,
+        resultMessage: c.resultMsg,
+        failureMessage: c.failMsg,
+        error: c.error,
+        count: c.count,
+        value: c.value,
+        elements: els.map(function (e) {
+          return {
+            category: e.category, family: e.family, type: e.type,
+            name: e.name, value: e.value, elementId: e.elementId, count: e.count
+          };
+        })
+      };
+    });
+  }
+
+  function filesSummary(list) {
+    var byFile = {};
+    list.forEach(function (c) { (byFile[c.file] = byFile[c.file] || []).push(c); });
+    return Object.keys(byFile).sort().map(function (fname) {
+      var s = computeStats(byFile[fname]);
+      var info = FILE_INFO[fname] || {};
+      return {
+        file: fname,
+        discipline: info.discipline || null,
+        disciplineLabel: info.disciplineLabel || null,
+        pass: s.pass, fail: s.fail, na: s.na, evaluated: s.evaluated,
+        pctCompliance: s.pct === null ? null : Math.round(s.pct * 10) / 10
+      };
+    });
+  }
+
+  function triggerDownload(obj, filename) {
+    var jsonStr = JSON.stringify(obj, null, 2);
+    var blob = new Blob([jsonStr], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('export-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'export-toast';
+      t.className = 'export-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    requestAnimationFrame(function () { t.classList.add('show'); });
+    clearTimeout(t._hideTimer);
+    t._hideTimer = setTimeout(function () { t.classList.remove('show'); }, 2600);
+  }
+
+  function exportFullReport() {
+    var summary = computeStats(CHECKS);
+    var payload = {
+      exportType: 'full_report',
+      generatedAt: new Date().toISOString(),
+      meta: DATA.meta,
+      files: filesSummary(CHECKS),
+      disciplines: DISCIPLINES,
+      checkItems: ITEM_ORDER,
+      overview: {
+        filesCount: FILES.length,
+        pass: summary.pass,
+        fail: summary.fail,
+        na: summary.na,
+        evaluated: summary.evaluated,
+        pctCompliance: summary.pct === null ? null : Math.round(summary.pct * 10) / 10
+      },
+      summaryByItem: buildSummaryByItem(CHECKS),
+      checks: checksWithElements(CHECKS)
+    };
+    triggerDownload(payload, 'BIM_QAQC_full_report_' + timestampSlug() + '.json');
+    showToast('Full report exported');
+  }
+
+  function exportCurrentView() {
+    var base = baseFilteredChecks();
+
+    var q = (state.detailQuery || '').toLowerCase();
+    var detailChecks = base.filter(function (c) {
+      if (state.result !== 'all' && c.result !== state.result) return false;
+      if (state.itemFilter && c.name !== state.itemFilter) return false;
+      if (q) {
+        var hay = (c.name + ' ' + c.desc + ' ' + c.resultMsg + ' ' + c.failMsg).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    var itemSearchText = document.getElementById('item-search').value || '';
+    var summaryByItemList = buildSummaryByItem(base).filter(function (row) {
+      return !itemSearchText || row.name.toLowerCase().indexOf(itemSearchText.toLowerCase()) !== -1;
+    });
+    if (state.itemSort === 'desc' || state.itemSort === 'asc') {
+      summaryByItemList.sort(function (a, b) {
+        if (a.pctCompliance === null && b.pctCompliance === null) return 0;
+        if (a.pctCompliance === null) return 1;
+        if (b.pctCompliance === null) return -1;
+        return state.itemSort === 'desc' ? (b.pctCompliance - a.pctCompliance) : (a.pctCompliance - b.pctCompliance);
+      });
+    }
+
+    var overviewStats = computeStats(base);
+    var filesInView = filesSummary(detailChecks);
+    if (state.sort === 'desc' || state.sort === 'asc') {
+      filesInView.sort(function (a, b) {
+        if (a.pctCompliance === null && b.pctCompliance === null) return a.file.localeCompare(b.file);
+        if (a.pctCompliance === null) return 1;
+        if (b.pctCompliance === null) return -1;
+        return state.sort === 'desc' ? (b.pctCompliance - a.pctCompliance) : (a.pctCompliance - b.pctCompliance);
+      });
+    }
+
+    var payload = {
+      exportType: 'filtered_view',
+      generatedAt: new Date().toISOString(),
+      meta: DATA.meta,
+      filtersApplied: {
+        file: state.file === 'all' ? 'All files' : state.file,
+        discipline: state.discipline === 'all' ? 'All disciplines' : (DISC_LABELS[state.discipline] || state.discipline),
+        result: state.result === 'all' ? 'All results' : state.result,
+        itemFilter: state.itemFilter || null,
+        detailSearchText: state.detailQuery || null,
+        summaryItemSearchText: itemSearchText || null,
+        summaryByItemSort: state.itemSort,
+        detailsGroupSort: state.sort
+      },
+      overview: {
+        filesInScope: filesInView.length,
+        pass: overviewStats.pass,
+        fail: overviewStats.fail,
+        na: overviewStats.na,
+        evaluated: overviewStats.evaluated,
+        pctCompliance: overviewStats.pct === null ? null : Math.round(overviewStats.pct * 10) / 10
+      },
+      summaryByItem: summaryByItemList,
+      filesInView: filesInView,
+      checks: checksWithElements(detailChecks)
+    };
+    triggerDownload(payload, 'BIM_QAQC_filtered_view_' + timestampSlug() + '.json');
+    showToast('Current view exported');
+  }
+
+  var exportMenu = document.getElementById('export-menu');
+  document.getElementById('export-toggle').addEventListener('click', function (e) {
+    e.stopPropagation();
+    exportMenu.classList.toggle('open');
+  });
+  exportMenu.addEventListener('click', function (e) {
+    var t = e.target.closest('div[data-action]');
+    if (!t) return;
+    exportMenu.classList.remove('open');
+    if (t.getAttribute('data-action') === 'full') exportFullReport();
+    else exportCurrentView();
+  });
+  document.addEventListener('click', function (e) {
+    if (!document.getElementById('export-dropdown').contains(e.target)) {
+      exportMenu.classList.remove('open');
+    }
   });
 
   // close open combo lists on outside click
