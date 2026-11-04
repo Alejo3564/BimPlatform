@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BIM &amp; IFC QA/QC Report &middot; VE-891-2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --midnight: #08212C;
+  --midnight-400: #344A54;
+  --midnight-300: #61747C;
+  --midnight-100: #BAC7CC;
+  --midnight-050: #EFF4F5;
+  --vert: #BED13E;
+  --vert-600: #91A41A;
+  --vert-700: #788811;
+  --vert-050: #F6F9D7;
+  --azure: #0099A5;
+  --azure-600: #00858E;
+  --azure-050: #E6F4F4;
+  --duck: #00617E;
+  --duck-600: #00566E;
+  --duck-050: #BFE6EF;
+  --red: #D23839;
+  --red-600: #98090E;
+  --red-050: #F4E6E7;
+  --orange: #F6704C;
+  --orange-600: #CB421C;
+  --orange-050: #F4E8E4;
+  --grey-700: #5B5B5B;
+  --grey-300: #A5A5A5;
+  --grey-100: #D6D6D6;
+  --grey-050: #EFEFEF;
+  --bg: #F9F9F5;
+  --card: #FFFFFF;
+  --ink: #142A33;
+  --ink-soft: #4B5F68;
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 1px 2px rgba(8,33,44,.06), 0 6px 20px -8px rgba(8,33,44,.12);
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------------- Tab navigation ---------------- */
+.tab-nav {
+  display: flex;
+  gap: 6px;
+  margin-top: 22px;
+  border-bottom: 2px solid var(--midnight-050);
+}
+.tab-btn {
+  border: none;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: 12px 18px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: var(--midnight); }
+.tab-btn.active { color: var(--midnight); border-bottom-color: var(--vert-600); }
+
+/* ---------------- Header ---------------- */
+.top-header {
+  background: linear-gradient(135deg, var(--midnight) 0%, #0d3140 100%);
+  color: #fff;
+  padding: 28px 0 24px;
+  border-bottom: 4px solid var(--vert);
+}
+.top-header .wrap { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 18px; }
+.brand-row { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: .04em;
+  background: var(--vert);
+  color: var(--midnight);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+.brand-title h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0 0 2px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+.brand-title p {
+  margin: 0;
+  color: var(--midnight-100);
+  font-size: 13.5px;
+}
+.project-tag {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(190,209,62,.45);
+  color: var(--vert);
+  padding: 8px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ---------------- Meta strip ---------------- */
+.meta-strip {
+  background: var(--duck);
+  color: #fff;
+}
+.meta-strip .wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  padding: 14px 24px;
+  font-size: 12.5px;
+}
+.meta-item .k { text-transform: uppercase; letter-spacing: .06em; font-size: 10.5px; color: var(--duck-050); display:block; margin-bottom: 2px;}
+.meta-item .v { font-weight: 600; word-break: break-word; }
+
+/* ---------------- Section headings ---------------- */
+.section { margin-top: 34px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;}
+.section-head h2 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  margin: 0;
+  color: var(--midnight);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-head h2 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--vert-600); display: inline-block; }
+.section-sub { color: var(--ink-soft); font-size: 13px; margin: 2px 0 0; }
+
+/* ---------------- Filters ---------------- */
+.filters-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-top: 22px;
+  border: 1px solid var(--midnight-050);
+}
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+.field label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--duck);
+  margin-bottom: 6px;
+}
+.combo { position: relative; }
+.combo input {
+  width: 100%;
+  padding: 10px 34px 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--azure-050);
+  background: var(--azure-050);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s, background .15s;
+}
+.combo input:focus {
+  border-color: var(--azure);
+  background: #fff;
+}
+.combo .chev {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  color: var(--azure-600); pointer-events: none; font-size: 11px;
+}
+.combo-list {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--midnight-100);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 28px -10px rgba(8,33,44,.28);
+  display: none;
+}
+.combo-list.open { display: block; }
+.combo-list div {
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--grey-050);
+}
+.combo-list div:last-child { border-bottom: none; }
+.combo-list div:hover, .combo-list div.hi { background: var(--vert-050); }
+.combo-list div.all-opt { font-weight: 700; color: var(--duck); }
+.combo-list .empty { color: var(--grey-300); cursor: default; font-style: italic; }
+
+.reset-btn {
+  border: 1.5px solid var(--midnight-100);
+  background: #fff;
+  color: var(--midnight);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  white-space: nowrap;
+}
+.reset-btn:hover { background: var(--midnight-050); border-color: var(--midnight-300); }
+
+/* ---------------- Export dropdown ---------------- */
+.export-dropdown { position: relative; }
+.export-btn {
+  border: 1.5px solid var(--vert-600);
+  background: var(--vert-050);
+  color: var(--vert-700);
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  white-space: nowrap;
+}
+.export-btn:hover { background: var(--vert); color: var(--midnight); }
+.chev-inline { font-size: 11px; }
+.export-menu {
+  position: absolute;
+  z-index: 45;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 260px;
+  background: #fff;
+  border: 1px solid var(--midnight-100);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 28px -10px rgba(8,33,44,.28);
+  display: none;
+  overflow: hidden;
+}
+.export-menu.open { display: block; }
+.export-menu div[data-action] {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--grey-050);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.export-menu div[data-action]:last-child { border-bottom: none; }
+.export-menu div[data-action]:hover { background: var(--vert-050); }
+.export-menu .em-title { font-size: 13px; font-weight: 700; color: var(--midnight); }
+.export-menu .em-sub { font-size: 11.5px; color: var(--ink-soft); }
+.export-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--midnight); color: #fff; padding: 10px 18px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s; z-index: 100;
+}
+.export-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.active-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--vert-050); color: var(--vert-700);
+  border: 1px solid var(--vert); border-radius: 999px;
+  padding: 5px 10px; font-size: 12px; font-weight: 600;
+}
+.pill button {
+  border: none; background: none; color: var(--vert-700); cursor: pointer; font-size: 13px; line-height: 1; padding: 0;
+}
+
+/* ---------------- Summary cards ---------------- */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+@media (max-width: 980px) { .summary-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .summary-grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--midnight-050);
+  padding: 18px 20px;
+}
+.card .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); font-weight: 600; }
+
+.hero-card { display: flex; align-items: center; gap: 18px; }
+.ring-wrap { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-wrap .ring-bg { stroke: var(--grey-050); }
+.ring-num {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 21px;
+}
+.hero-text .label { margin-bottom: 4px; }
+.hero-text .big { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--midnight); }
+
+.stat-num { font-family: var(--font-display); font-weight: 700; font-size: 30px; margin-top: 6px; color: var(--midnight); }
+.stat-num.c-pass { color: var(--vert-700); }
+.stat-num.c-fail { color: var(--red-600); }
+.stat-num.c-na { color: var(--grey-700); }
+.stat-foot { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+
+/* ---------------- Compliance colors ---------------- */
+.c-red { color: var(--red-600); }
+.c-orange { color: var(--orange-600); }
+.c-azure { color: var(--azure-600); }
+.c-green { color: var(--vert-700); }
+.bg-red { background: var(--red); }
+.bg-orange { background: var(--orange); }
+.bg-azure { background: var(--azure); }
+.bg-green { background: var(--vert-600); }
+
+/* ---------------- Summary by item table ---------------- */
+.table-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--midnight-050);
+  overflow: hidden;
+}
+.table-toolbar {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 14px 18px; border-bottom: 1px solid var(--grey-050); flex-wrap: wrap;
+}
+.search-box { position: relative; flex: 1; min-width: 200px; max-width: 320px; }
+.search-box input {
+  width: 100%; padding: 9px 12px 9px 32px; border-radius: 999px;
+  border: 1.5px solid var(--grey-100); font-size: 13px; outline: none;
+}
+.search-box input:focus { border-color: var(--azure); }
+.search-box .ic { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--grey-300); font-size: 13px; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-soft); }
+.legend span { display:inline-flex; align-items:center; gap:5px;}
+.legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+table.items { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.items th {
+  text-align: left; background: var(--midnight); color: #fff;
+  padding: 11px 16px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em;
+  position: sticky; top: 0;
+}
+table.items th.num, table.items td.num { text-align: center; }
+table.items td { padding: 10px 16px; border-bottom: 1px solid var(--grey-050); vertical-align: middle; }
+table.items tbody tr { cursor: pointer; transition: background .12s; }
+table.items tbody tr:hover { background: var(--vert-050); }
+table.items tbody tr.active-row { background: var(--azure-050); }
+.item-name { font-weight: 600; color: var(--midnight); }
+.pct-cell { display: flex; align-items: center; gap: 10px; min-width: 160px; }
+.pct-bar-track { flex: 1; height: 8px; border-radius: 6px; background: var(--grey-050); overflow: hidden; }
+.pct-bar-fill { height: 100%; border-radius: 6px; }
+.pct-num { font-family: var(--font-mono); font-weight: 700; font-size: 12.5px; width: 46px; text-align: right; }
+.table-scroll { max-height: 560px; overflow-y: auto; }
+.table-empty { padding: 40px 20px; text-align: center; color: var(--grey-300); font-size: 13.5px; }
+
+/* ---------------- Details by item ---------------- */
+.file-group { margin-bottom: 16px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--midnight-050); background: var(--card); box-shadow: var(--shadow); }
+.file-group-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 18px; cursor: pointer; background: var(--midnight-050);
+  flex-wrap: wrap;
+}
+.file-group-head:hover { background: #e6eef0; }
+.fg-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.fg-caret { transition: transform .15s; color: var(--duck); font-size: 12px; flex-shrink:0; }
+.file-group.open .fg-caret { transform: rotate(90deg); }
+.fg-name { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--midnight); overflow-wrap: anywhere; }
+.fg-disc { font-size: 11px; background: var(--duck); color: #fff; padding: 2px 8px; border-radius: 999px; font-weight: 600; flex-shrink: 0; }
+.fg-right { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--ink-soft); flex-shrink: 0; }
+.fg-pct { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.file-group-body { display: none; padding: 6px 18px 18px; }
+.file-group.open .file-group-body { display: block; }
+
+.check-card {
+  border: 1px solid var(--grey-100);
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 12px;
+}
+.check-card.res-pass { border-left: 4px solid var(--vert-600); }
+.check-card.res-fail { border-left: 4px solid var(--red); background: var(--red-050); }
+.check-card.res-na { border-left: 4px solid var(--grey-300); }
+.chk-icon { display: flex; align-items: center; justify-content: center; }
+.chk-icon svg { width: 24px; height: 24px; }
+.chk-name { font-weight: 700; color: var(--midnight); font-size: 14px; }
+.chk-desc { color: var(--ink-soft); font-size: 13px; margin-top: 3px; }
+.chk-extra { font-size: 12.5px; margin-top: 6px; color: var(--ink); }
+.chk-extra b { color: var(--midnight); }
+.chk-count { display: inline-block; margin-top: 6px; font-family: var(--font-mono); font-size: 11.5px; background: var(--midnight-050); color: var(--midnight); padding: 2px 8px; border-radius: 6px; }
+
+.el-table-wrap { margin-top: 10px; border: 1px solid var(--grey-100); border-radius: 8px; max-height: 300px; overflow: auto; }
+table.elements { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.elements th {
+  position: sticky; top: 0; background: var(--grey-050); text-align: left; padding: 7px 10px;
+  font-weight: 700; color: var(--midnight-400); border-bottom: 1px solid var(--grey-100);
+}
+table.elements td { padding: 6px 10px; border-bottom: 1px solid var(--grey-050); color: var(--ink); }
+table.elements tr:last-child td { border-bottom: none; }
+
+.details-toolbar { display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom: 14px;}
+.expand-btns { display: flex; gap: 8px; }
+.expand-btns button {
+  border: 1.5px solid var(--midnight-100); background: #fff; color: var(--midnight);
+  font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+}
+.expand-btns button:hover { background: var(--midnight-050); }
+
+.sort-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sort-label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); }
+.sort-btn {
+  border: 1.5px solid var(--azure-050); background: var(--azure-050); color: var(--duck);
+  font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.sort-btn:hover { background: var(--duck-050); }
+.sort-btn.active { background: var(--duck); border-color: var(--duck); color: #fff; }
+
+footer.site-footer {
+  margin-top: 50px; padding: 26px 0 40px; text-align: center; color: var(--ink-soft); font-size: 12px;
+}
+footer.site-footer b { color: var(--midnight); }
+
+/* ---------------- Reviewer Responses tab ---------------- */
+.resp-summary-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  white-space: nowrap;
+}
+.status-badge i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.status-corrected { background: var(--vert-050); color: var(--vert-700); }
+.status-corrected i { background: var(--vert-600); }
+.status-justified { background: var(--azure-050); color: var(--azure-600); }
+.status-justified i { background: var(--azure); }
+.status-in-review { background: var(--orange-050); color: var(--orange-600); }
+.status-in-review i { background: var(--orange); }
+.status-pending { background: var(--grey-050); color: var(--grey-700); }
+.status-pending i { background: var(--grey-300); }
+.status-na { background: var(--midnight-050); color: var(--midnight-400); }
+.status-na i { background: var(--midnight-300); }
+
+.report-tag {
+  font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+  text-transform: uppercase; letter-spacing: .02em;
+}
+.report-tag.model { background: var(--midnight-050); color: var(--midnight); }
+.report-tag.ifc { background: var(--duck-050); color: var(--duck); }
+
+table.resp-table td { vertical-align: top; }
+table.resp-table .resp-file { font-family: var(--font-mono); font-size: 11.5px; color: var(--midnight); overflow-wrap: anywhere; max-width: 220px; }
+table.resp-table .resp-item { font-weight: 600; color: var(--midnight); max-width: 200px; }
+table.resp-table .resp-reviewer { font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
+table.resp-table .resp-date { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; }
+table.resp-table .resp-text {
+  max-width: 340px; color: var(--ink); font-size: 13px; cursor: pointer;
+}
+table.resp-table .resp-text .clamp {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+table.resp-table tr.expanded .resp-text .clamp {
+  -webkit-line-clamp: unset; overflow: visible;
+}
+table.resp-table .resp-fail-msg { color: var(--ink-soft); font-size: 12px; margin-top: 4px; font-style: italic; }
+table.resp-table .resp-more { color: var(--duck); font-size: 11px; font-weight: 600; margin-top: 3px; }
+
+@media (max-width: 700px) {
+  .top-header .wrap { flex-direction: column; align-items: flex-start; }
+  table.items { font-size: 12.5px; }
+  .pct-cell { min-width: 120px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div class="wrap">
+    <div class="brand-row">
+      <span class="brand-mark">EGIS</span>
+      <div class="brand-title">
+        <h1>BIM Quality Report &middot; QA/QC</h1>
+        <p>BIM QUALITY REPORT</p>
+      </div>
+    </div>
+    <div class="project-tag">Project VE-891-2025</div>
+  </div>
+</header>
+
+<div class="meta-strip">
+  <div class="wrap">
+    <div class="meta-item"><span class="k">Task Name</span><span class="v">FE_ANI_0007_F2_PR26_TR000_NA000_BIM_QAL_0001</span></div>
+    <div class="meta-item"><span class="k">Report Date</span><span class="v">Tuesday, 03 November 2026 - 18:29:00 UTC</span></div>
+    <div class="meta-item"><span class="k">Checkset</span><span class="v">FE_ANI_0007_F2_PR07_TR000_NA000_BIM_SET_0011</span></div>
+    <div class="meta-item"><span class="k">Author</span><span class="v">ivonne.salamanca</span></div>
+    <div class="meta-item"><span class="k">Files analyzed</span><span class="v">3</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="tab-nav">
+    <button class="tab-btn active" id="tab-btn-model" data-tab="model">Model Quality Report</button>
+    <button class="tab-btn" id="tab-btn-ifc" data-tab="ifc">IFC Quality Report</button>
+    <button class="tab-btn" id="tab-btn-responses" data-tab="responses">Reviewer Responses</button>
+  </nav>
+</div>
+
+<main class="wrap">
+<div class="tab-panel" id="panel-model">
+  <section class="section">
+    <div class="filters-card">
+      <div class="filters-grid">
+        <div class="field">
+          <label for="model-file-combo-input">File</label>
+          <div class="combo" id="model-file-combo">
+            <input id="model-file-combo-input" type="text" autocomplete="off" placeholder="Search file…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="model-discipline-combo-input">Discipline</label>
+          <div class="combo" id="model-discipline-combo">
+            <input id="model-discipline-combo-input" type="text" autocomplete="off" placeholder="Search discipline…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="model-result-combo-input">Result</label>
+          <div class="combo" id="model-result-combo">
+            <input id="model-result-combo-input" type="text" autocomplete="off" placeholder="Search result…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <button class="reset-btn" id="model-reset-filters" type="button">↺ Clear filters</button>
+        </div>
+        <div class="field">
+          <div class="export-dropdown" id="model-export-dropdown">
+            <button class="export-btn" id="model-export-toggle" type="button">⬇ Export JSON <span class="chev-inline">▾</span></button>
+            <div class="export-menu" id="model-export-menu">
+              <div data-action="full">
+                <span class="em-title">Export full report</span>
+                <span class="em-sub">All files &amp; checks & elements</span>
+              </div>
+              <div data-action="filtered">
+                <span class="em-title">Export current view</span>
+                <span class="em-sub">Only what matches active filters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="active-pills" id="model-active-pills"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Overview</h2>
+      <p class="section-sub">Compliance % is calculated from Pass/Fail results (Value column in Checks). N/A results are not counted.</p>
+    </div>
+    <div class="summary-grid" id="model-summary-cards"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Summary by item</h2>
+      <p class="section-sub">Summary per evaluated item (Name column in Checks). Click a row to filter the detail view below.</p>
+    </div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <span class="ic">🔍</span>
+          <input id="model-item-search" type="text" placeholder="Search item…"/>
+        </div>
+        <div class="sort-group" id="model-item-sort-btns">
+          <span class="sort-label">Sort by compliance:</span>
+          <button type="button" id="model-item-sort-none" class="sort-btn active">Default</button>
+          <button type="button" id="model-item-sort-desc" class="sort-btn">Highest first</button>
+          <button type="button" id="model-item-sort-asc" class="sort-btn">Lowest first</button>
+        </div>
+        <div class="legend">
+          <span><i class="bg-red"></i>&lt; 50%</span>
+          <span><i class="bg-orange"></i>50–75%</span>
+          <span><i class="bg-azure"></i>76–90%</span>
+          <span><i class="bg-green"></i>91–100%</span>
+        </div>
+      </div>
+      <div class="table-scroll" id="model-items-table-scroll">
+        <table class="items">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th class="num">Pass</th>
+              <th class="num">Fail</th>
+              <th class="num">NA</th>
+              <th>% Compliance</th>
+            </tr>
+          </thead>
+          <tbody id="model-items-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-empty" id="model-items-empty" style="display:none">No matches found.</div>
+    </div>
+  </section>
+
+  <section class="section" id="model-details-section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Details by item</h2>
+      <p class="section-sub">Combines the Checks + Elements tables (joined by File + Check ID).</p>
+    </div>
+    <div class="details-toolbar">
+      <div class="search-box" style="max-width:360px">
+        <span class="ic">🔍</span>
+        <input id="model-detail-search" type="text" placeholder="Search in details…"/>
+      </div>
+      <div class="sort-group" id="model-sort-btns">
+        <span class="sort-label">Sort by compliance:</span>
+        <button type="button" id="model-sort-none" class="sort-btn active">Default</button>
+        <button type="button" id="model-sort-desc" class="sort-btn">Highest first</button>
+        <button type="button" id="model-sort-asc" class="sort-btn">Lowest first</button>
+      </div>
+      <div class="expand-btns">
+        <button type="button" id="model-expand-all">Expand all</button>
+        <button type="button" id="model-collapse-all">Collapse all</button>
+      </div>
+    </div>
+    <div id="model-details-wrap"></div>
+  </section>
+</div><div class="tab-panel" id="panel-ifc" style="display:none">
+  <section class="section">
+    <div class="filters-card">
+      <div class="filters-grid">
+        <div class="field">
+          <label for="ifc-file-combo-input">File</label>
+          <div class="combo" id="ifc-file-combo">
+            <input id="ifc-file-combo-input" type="text" autocomplete="off" placeholder="Search file…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ifc-discipline-combo-input">Discipline</label>
+          <div class="combo" id="ifc-discipline-combo">
+            <input id="ifc-discipline-combo-input" type="text" autocomplete="off" placeholder="Search discipline…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ifc-result-combo-input">Result</label>
+          <div class="combo" id="ifc-result-combo">
+            <input id="ifc-result-combo-input" type="text" autocomplete="off" placeholder="Search result…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <button class="reset-btn" id="ifc-reset-filters" type="button">↺ Clear filters</button>
+        </div>
+        <div class="field">
+          <div class="export-dropdown" id="ifc-export-dropdown">
+            <button class="export-btn" id="ifc-export-toggle" type="button">⬇ Export JSON <span class="chev-inline">▾</span></button>
+            <div class="export-menu" id="ifc-export-menu">
+              <div data-action="full">
+                <span class="em-title">Export full report</span>
+                <span class="em-sub">All files &amp; checks</span>
+              </div>
+              <div data-action="filtered">
+                <span class="em-title">Export current view</span>
+                <span class="em-sub">Only what matches active filters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="active-pills" id="ifc-active-pills"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Overview</h2>
+      <p class="section-sub">Compliance % is calculated from Pass/Fail results (Value column in Ifc Check). N/A results are not counted.</p>
+    </div>
+    <div class="summary-grid" id="ifc-summary-cards"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Summary by item</h2>
+      <p class="section-sub">Summary per evaluated IFC item (Name column in Ifc Check). Click a row to filter the detail view below.</p>
+    </div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <span class="ic">🔍</span>
+          <input id="ifc-item-search" type="text" placeholder="Search item…"/>
+        </div>
+        <div class="sort-group" id="ifc-item-sort-btns">
+          <span class="sort-label">Sort by compliance:</span>
+          <button type="button" id="ifc-item-sort-none" class="sort-btn active">Default</button>
+          <button type="button" id="ifc-item-sort-desc" class="sort-btn">Highest first</button>
+          <button type="button" id="ifc-item-sort-asc" class="sort-btn">Lowest first</button>
+        </div>
+        <div class="legend">
+          <span><i class="bg-red"></i>&lt; 50%</span>
+          <span><i class="bg-orange"></i>50–75%</span>
+          <span><i class="bg-azure"></i>76–90%</span>
+          <span><i class="bg-green"></i>91–100%</span>
+        </div>
+      </div>
+      <div class="table-scroll" id="ifc-items-table-scroll">
+        <table class="items">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th class="num">Pass</th>
+              <th class="num">Fail</th>
+              <th class="num">NA</th>
+              <th>% Compliance</th>
+            </tr>
+          </thead>
+          <tbody id="ifc-items-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-empty" id="ifc-items-empty" style="display:none">No matches found.</div>
+    </div>
+  </section>
+
+  <section class="section" id="ifc-details-section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Details by item</h2>
+      <p class="section-sub">Combines the Ifc Check + Ifc Elements tables (joined by File + Check ID).</p>
+    </div>
+    <div class="details-toolbar">
+      <div class="search-box" style="max-width:360px">
+        <span class="ic">🔍</span>
+        <input id="ifc-detail-search" type="text" placeholder="Search in details…"/>
+      </div>
+      <div class="sort-group" id="ifc-sort-btns">
+        <span class="sort-label">Sort by compliance:</span>
+        <button type="button" id="ifc-sort-none" class="sort-btn active">Default</button>
+        <button type="button" id="ifc-sort-desc" class="sort-btn">Highest first</button>
+        <button type="button" id="ifc-sort-asc" class="sort-btn">Lowest first</button>
+      </div>
+      <div class="expand-btns">
+        <button type="button" id="ifc-expand-all">Expand all</button>
+        <button type="button" id="ifc-collapse-all">Collapse all</button>
+      </div>
+    </div>
+    <div id="ifc-details-wrap"></div>
+  </section>
+</div>
+
+<div class="tab-panel" id="panel-responses" style="display:none">
+  <section class="section">
+    <div class="filters-card">
+      <div class="filters-grid">
+        <div class="field">
+          <label for="resp-report-combo-input">Report</label>
+          <div class="combo" id="resp-report-combo">
+            <input id="resp-report-combo-input" type="text" autocomplete="off" placeholder="Search report…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="resp-file-combo-input">Model</label>
+          <div class="combo" id="resp-file-combo">
+            <input id="resp-file-combo-input" type="text" autocomplete="off" placeholder="Search model…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="resp-item-combo-input">Item</label>
+          <div class="combo" id="resp-item-combo">
+            <input id="resp-item-combo-input" type="text" autocomplete="off" placeholder="Search item…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="resp-status-combo-input">Status</label>
+          <div class="combo" id="resp-status-combo">
+            <input id="resp-status-combo-input" type="text" autocomplete="off" placeholder="Search status…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="resp-reviewer-combo-input">Reviewer</label>
+          <div class="combo" id="resp-reviewer-combo">
+            <input id="resp-reviewer-combo-input" type="text" autocomplete="off" placeholder="Search reviewer…"/>
+            <span class="chev">▾</span>
+            <div class="combo-list"></div>
+          </div>
+        </div>
+        <div class="field">
+          <button class="reset-btn" id="resp-reset-filters" type="button">↺ Clear filters</button>
+        </div>
+        <div class="field export-field">
+          <div class="export-dropdown" id="resp-export-dropdown">
+            <button class="export-btn" id="resp-export-toggle" type="button">⬇ Export JSON <span class="chev-inline">▾</span></button>
+            <div class="export-menu" id="resp-export-menu">
+              <div data-action="full">
+                <span class="em-title">Export all responses</span>
+                <span class="em-sub">Every consolidated reviewer response</span>
+              </div>
+              <div data-action="filtered">
+                <span class="em-title">Export current view</span>
+                <span class="em-sub">Only what matches active filters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="active-pills" id="resp-active-pills"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Response overview</h2>
+      <p class="section-sub">Consolidated from every reviewer export (Revit / Civil 3D plugin) uploaded so far.</p>
+    </div>
+    <div class="summary-grid resp-summary-grid" id="resp-summary-cards"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2><span class="dot"></span>Responses by item</h2>
+      <p class="section-sub">One row per reviewed Fail item. Click a row to expand the full response.</p>
+    </div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <span class="ic">🔍</span>
+          <input id="resp-search" type="text" placeholder="Search responses…"/>
+        </div>
+        <div class="sort-group" id="resp-sort-btns">
+          <span class="sort-label">Sort by reviewed date:</span>
+          <button type="button" id="resp-sort-newest" class="sort-btn active">Newest first</button>
+          <button type="button" id="resp-sort-oldest" class="sort-btn">Oldest first</button>
+        </div>
+      </div>
+      <div class="table-scroll" id="resp-table-scroll">
+        <table class="items resp-table">
+          <thead>
+            <tr>
+              <th>Report</th>
+              <th>Model</th>
+              <th>Item</th>
+              <th>Status</th>
+              <th>Response</th>
+              <th>Reviewer</th>
+              <th>Reviewed</th>
+            </tr>
+          </thead>
+          <tbody id="resp-tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-empty" id="resp-empty" style="display:none">No responses match the current filters.</div>
+    </div>
+  </section>
+</div>
+
+  <footer class="site-footer">
+    <p>Report generated from <b>FE_ANI_0007_F2_PR26_TR000_NA000_BIM_QAL_0001.xlsx</b> &middot; EGIS &middot; Project VE-891-2025</p>
+  </footer>
+
+</main>
+
+<script id="report-data" type="application/json">{"meta":{"taskName":"FE_ANI_0007_F2_PR26_TR000_NA000_BIM_QAL_0001","taskDesc":"BIM QUALITY REPORT","reportDate":"Tuesday, 03 November 2026 - 18:29:00 UTC","checksetTitle":"FE_ANI_0007_F2_PR07_TR000_NA000_BIM_SET_0011","checksetAuthor":"ivonne.salamanca","checksetDesc":"Uploaded Check Set","projectCode":"VE-891-2025","filesAnalyzed":3},"model":{"files":[{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","discipline":"EST","disciplineLabel":"Structural"},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","discipline":"EST","disciplineLabel":"Structural"},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","discipline":"EST","disciplineLabel":"Structural"}],"disciplines":["EST"],"checkNamesOrder":["01_Codificación Modelo","02_Nombramiento y Codificación","03_Alertas","04_Familias In Situ","05_Formato/Versión","06_Codificación de Planos","07_Cantidad de  Planos","08_Purge","09_Tamaño Modelo","10_Vista Coordinacion","11_Coordinacion","12_Publish 3D_COORDINACION","13_Publish Planos","14_Geolocalización","15_Duplicados","16_Fase de objetos","17_Materiales","18_Nombre de Objetos","19_Posición","20_Objetos Arquitectónicos modelados con las categorías adecuadas","21_Objetos Estructurales modelados con las categorías adecuadas","22_Objetos MEP modelados con las categorías adecuadas","23_Objetos infraestructura modelados con las categorías adecuadas","24_Idioma modelos","25_Import Cad","26_Links Cad","27_Links Rvt pinados","28_Nombre de Niveles","29_Nombre de Vistas","30_LOG"],"checks":[{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"3479bdfe-b54b-45d6-91c5-d755716d026f","name":"01_Codificación Modelo","desc":"El modelo se encuentra codificado según lo establecido en el PEB.","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"dae3da2d-64e7-4703-84e9-429b83552e70","name":"02_Nombramiento y Codificación","desc":"Los campos de codificación están acordes al nombramiento y codificación del proyecto","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"31c099cb-f758-4663-8e34-50741e08fbe7","name":"03_Alertas","desc":"Existen warnings o alertas razonables menores a 20","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"ac0759ea-61a5-4e01-a4f0-a25284117170","name":"04_Familias In Situ","desc":"El modelo sólo contiene familias del sistema (no familias en sitio)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"f0305619-9ca5-4d9f-9552-c20be8771f44","name":"05_Formato/Versión","desc":"El modelo BIM se encuentra en el formato y versión 2026 según el PEB","result":"Pass","failMsg":"","resultMsg":"Autodesk Revit 2026 26.5.0.14","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"0e2f7a28-4072-47e8-9887-f4dc21f74ccc","name":"06_Codificación de Planos","desc":"Los planos están codificados de acuerdo al sistema de nombramiento y codificación definido en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"a40ba831-f940-4a1f-9176-56c016d7c17f","name":"07_Cantidad de  Planos","desc":"La cantidad de planos en PDF coincide con la cantidad de planos elaborados en el modelo.","result":"NA","failMsg":"Para esta etapa, este ítem no es objeto de validación, ya que el diseño se encuentra en proceso y aún no se cuenta con los planos necesarios para su verificación.","resultMsg":"","error":"","count":299,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"b222ea34-3968-4b64-9c6b-71f8cdc68c92","name":"08_Purge","desc":"El archivo se encuentra limpio o purgado","result":"Fail","failMsg":"El archivo debe estar completamente purgado. Asimismo, se debe verificar que la eliminación de vínculos e importaciones CAD no genere elementos residuales dentro del modelo","resultMsg":"","error":"","count":299,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"7cd965b9-c073-434a-a38f-602a6d293bef","name":"09_Tamaño Modelo","desc":"Peso del modelo menor a 250 MB","result":"Pass","failMsg":"","resultMsg":"27.82 MB","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"ece3e4a1-ec8c-4fb0-93de-7e85ee33f9ab","name":"10_Vista Coordinacion","desc":"La vista Coordinacion solo contiene elementos 3D","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"b87965ff-0770-417d-9a7a-c413b0dc7bdc","name":"11_Coordinacion","desc":"La vista Coordinacion solo contiene elementos 3D","result":"Fail","failMsg":"La vista de coordinación contiene lineas que no pertenecen a los elementos 3D modelados","resultMsg":"","error":"","count":0,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"d7bc733c-4eff-4906-b775-2f65001ae304","name":"12_Publish 3D_COORDINACION","desc":"Vista Coordinacion está configurada en Publish","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"a1251fa8-16c5-43f4-8048-23ad150853a2","name":"13_Publish Planos","desc":"Planos de Revit están configurados en Publish","result":"NA","failMsg":"Para esta etapa, este ítem no es objeto de validación, ya que el diseño se encuentra en proceso y aún no se cuenta con los planos necesarios para su verificación.","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"34e10091-866b-4f89-9e89-14f4ea6e840f","name":"14_Geolocalización","desc":"El modelo se encuentra Geolocalizado según sistema de coordenadas estaclecido en el PEB","result":"NA","failMsg":"El modelo corresponde a una tipología estándar. Su geolocalización será definida y gestionada mediante el modelo de urbanismo","resultMsg":"","error":"","count":5,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"fcaf3853-51ea-48c8-9964-7713ab433bf3","name":"15_Duplicados","desc":"No existen elementos duplicados","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"273b327b-4c7a-493c-8bcc-9aa77bd9c4cc","name":"16_Fase de objetos","desc":"Los elementos modelados cuentan con la información de fase (Construcción nueva, existente, demolición, etc)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"bf044059-0b9b-456c-84f5-b8f8a2393040","name":"17_Materiales","desc":"Los elementos de modelado cuentan con la información mínima requerida en cuanto a sus materiales","result":"Fail","failMsg":"Existen materiales que no están nombrados de acuerdo a la codificación del PEB Tabla 56. Nomenclatura materiales. Ejemplo: Acero ASTM A36","resultMsg":"","error":"","count":95,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"5fcb5780-e87b-470e-8882-803ba2bdc63b","name":"18_Nombre de Objetos","desc":"Validar que se haya utilizado una nomenclatura de los elementos según estándar de creación de objetos según lo indicado en el PEB","result":"Fail","failMsg":"Objetos modelados no están nombrados de acuerdo al estándar de nomenclatura según lo indicado en el PEB","resultMsg":"Ver detalle objetos mal nombrados","error":"","count":52,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"5931d70b-94ce-4195-a28e-50a355245654","name":"19_Posición","desc":"Los elementos se encuentran correctamente posicionados espacialmente y/o referenciados en los niveles correspondientes.","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"e1a428ef-3ba1-462c-9c1a-d1328a7ea40c","name":"20_Objetos Arquitectónicos modelados con las categorías adecuadas","desc":"Los elementos arquitectónicos se han modelado con las categoria adecuadas (muros, puertas, ventanas, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural, no contiene categorías arquitectónicas que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"54861be3-1d79-4c30-a153-02a485a39030","name":"21_Objetos Estructurales modelados con las categorías adecuadas","desc":"Los elementos estructurales se han modelado con la categoria de elemento correspondiente, Ej.: Elemento: Columna → Tipo de Familia: Pilar Estructural o Structural Column","result":"Fail","failMsg":"La vista de Coordinación no debe contener vínculos ni elementos que no correspondan a un modelo 3D. Se solicita retirar el vínculo presente en esta vista para validar correctamente el uso y la clasificación de las categorías de los elementos empleados en el modelo.","resultMsg":"","error":"","count":0,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"232e9ccf-aae0-49a3-bc97-23e3b013e6f5","name":"22_Objetos MEP modelados con las categorías adecuadas","desc":"Los elementos MEP se han modelado con las categoria adecuadas (tuberías, ductos, accesorios, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural, no contiene categorías MEP que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"8ff5416f-af5c-4387-a1ad-bf6ed69d5f61","name":"23_Objetos infraestructura modelados con las categorías adecuadas","desc":"Los elementos de insfraestructura se han modelado con las categoria adecuadas (3D solid, bloques 3D, aligments, surface, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural de edificaciones, no contiene categorías de infraestructura que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"e08c4eb2-04da-4fc2-b721-a91beb8faeca","name":"24_Idioma modelos","desc":"Los LOI's y data del modelo Federado están estandarizados en el idioma del proyecto (todos los modelos individuales están exportados en el mismo idioma Ingles)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"d570b8a5-6a27-4f96-9ddf-4f8c42c7c02e","name":"25_Import Cad","desc":"No existen archivos importados en CAD","result":"Pass","failMsg":"","resultMsg":"","error":"","count":1,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"6c8e4173-7f12-4a9c-9909-3c453952d5e6","name":"26_Links Cad","desc":"No existen archivos vinculados en CAD","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"e1a657db-52f8-4808-8ce8-0138250e751f","name":"27_Links Rvt pinados","desc":"Los links de modelos de Revit se encuentran pinados","result":"Fail","failMsg":"Los links de modelos de Revit no se encuentran pinados","resultMsg":"","error":"","count":1,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"12acf37e-530a-4456-9367-82d5f705e348","name":"28_Nombre de Niveles","desc":"Los niveles se encuentran nombrados de acuerdo a lo indicado en el PEB","result":"Fail","failMsg":"Existen niveles que no están nombrados de acuerdo a la codificación del PEB Tabla 55. Nomenclatura niveles","resultMsg":"Ver detalle niveles mal nombrados","error":"","count":2,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"7ddc07a6-ebb9-4b79-adc9-a338879a1a4e","name":"29_Nombre de Vistas","desc":"Las vistas se encuentran nombradas de acuerdo a lo indicado en el PEB","result":"Fail","failMsg":"Existen vistas que no están nombradas de acuerdo a la codificación del PEB Tabla 57. Nomenclatura vistas","resultMsg":"","error":"","count":18,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","checkId":"170620a0-ed14-43d7-8426-fe34f2539933","name":"30_LOG","desc":"El modelo cumple los el LOg minimo establecido en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"3479bdfe-b54b-45d6-91c5-d755716d026f","name":"01_Codificación Modelo","desc":"El modelo se encuentra codificado según lo establecido en el PEB.","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"dae3da2d-64e7-4703-84e9-429b83552e70","name":"02_Nombramiento y Codificación","desc":"Los campos de codificación están acordes al nombramiento y codificación del proyecto","result":"Pass","failMsg":"","resultMsg":"","error":"","count":1,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"31c099cb-f758-4663-8e34-50741e08fbe7","name":"03_Alertas","desc":"Existen warnings o alertas razonables menores a 20","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"ac0759ea-61a5-4e01-a4f0-a25284117170","name":"04_Familias In Situ","desc":"El modelo sólo contiene familias del sistema (no familias en sitio)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"f0305619-9ca5-4d9f-9552-c20be8771f44","name":"05_Formato/Versión","desc":"El modelo BIM se encuentra en el formato y versión 2026 según el PEB","result":"Pass","failMsg":"","resultMsg":"Autodesk Revit 2026 26.5.0.14","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"0e2f7a28-4072-47e8-9887-f4dc21f74ccc","name":"06_Codificación de Planos","desc":"Los planos están codificados de acuerdo al sistema de nombramiento y codificación definido en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"a40ba831-f940-4a1f-9176-56c016d7c17f","name":"07_Cantidad de  Planos","desc":"La cantidad de planos en PDF coincide con la cantidad de planos elaborados en el modelo.","result":"NA","failMsg":"Para esta etapa, este ítem no es objeto de validación, ya que el diseño se encuentra en proceso y aún no se cuenta con los planos necesarios para su verificación.","resultMsg":"","error":"","count":15,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"b222ea34-3968-4b64-9c6b-71f8cdc68c92","name":"08_Purge","desc":"El archivo se encuentra limpio o purgado","result":"Fail","failMsg":"El archivo debe estar completamente purgado. Asimismo, se debe verificar que la eliminación de vínculos e importaciones CAD no genere elementos residuales dentro del modelo","resultMsg":"","error":"","count":15,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"7cd965b9-c073-434a-a38f-602a6d293bef","name":"09_Tamaño Modelo","desc":"Peso del modelo menor a 250 MB","result":"Pass","failMsg":"","resultMsg":"9.78 MB","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"ece3e4a1-ec8c-4fb0-93de-7e85ee33f9ab","name":"10_Vista Coordinacion","desc":"La vista Coordinacion solo contiene elementos 3D","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"b87965ff-0770-417d-9a7a-c413b0dc7bdc","name":"11_Coordinacion","desc":"La vista Coordinacion solo contiene elementos 3D","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"d7bc733c-4eff-4906-b775-2f65001ae304","name":"12_Publish 3D_COORDINACION","desc":"Vista Coordinacion está configurada en Publish","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"a1251fa8-16c5-43f4-8048-23ad150853a2","name":"13_Publish Planos","desc":"Planos de Revit están configurados en Publish","result":"NA","failMsg":"Para esta etapa, este ítem no es objeto de validación, ya que el diseño se encuentra en proceso y aún no se cuenta con los planos necesarios para su verificación.","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"34e10091-866b-4f89-9e89-14f4ea6e840f","name":"14_Geolocalización","desc":"El modelo se encuentra Geolocalizado según sistema de coordenadas estaclecido en el PEB","result":"NA","failMsg":"El modelo corresponde a una tipología estándar. Su geolocalización será definida y gestionada mediante el modelo de urbanismo","resultMsg":"","error":"","count":5,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"fcaf3853-51ea-48c8-9964-7713ab433bf3","name":"15_Duplicados","desc":"No existen elementos duplicados","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"273b327b-4c7a-493c-8bcc-9aa77bd9c4cc","name":"16_Fase de objetos","desc":"Los elementos modelados cuentan con la información de fase (Construcción nueva, existente, demolición, etc)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"bf044059-0b9b-456c-84f5-b8f8a2393040","name":"17_Materiales","desc":"Los elementos de modelado cuentan con la información mínima requerida en cuanto a sus materiales","result":"Pass","failMsg":"","resultMsg":"","error":"","count":81,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"5fcb5780-e87b-470e-8882-803ba2bdc63b","name":"18_Nombre de Objetos","desc":"Validar que se haya utilizado una nomenclatura de los elementos según estándar de creación de objetos según lo indicado en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"5931d70b-94ce-4195-a28e-50a355245654","name":"19_Posición","desc":"Los elementos se encuentran correctamente posicionados espacialmente y/o referenciados en los niveles correspondientes.","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"e1a428ef-3ba1-462c-9c1a-d1328a7ea40c","name":"20_Objetos Arquitectónicos modelados con las categorías adecuadas","desc":"Los elementos arquitectónicos se han modelado con las categoria adecuadas (muros, puertas, ventanas, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural, no contiene categorías arquitectónicas que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"54861be3-1d79-4c30-a153-02a485a39030","name":"21_Objetos Estructurales modelados con las categorías adecuadas","desc":"Los elementos estructurales se han modelado con la categoria de elemento correspondiente, Ej.: Elemento: Columna → Tipo de Familia: Pilar Estructural o Structural Column","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"232e9ccf-aae0-49a3-bc97-23e3b013e6f5","name":"22_Objetos MEP modelados con las categorías adecuadas","desc":"Los elementos MEP se han modelado con las categoria adecuadas (tuberías, ductos, accesorios, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural, no contiene categorías MEP que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"8ff5416f-af5c-4387-a1ad-bf6ed69d5f61","name":"23_Objetos infraestructura modelados con las categorías adecuadas","desc":"Los elementos de insfraestructura se han modelado con las categoria adecuadas (3D solid, bloques 3D, aligments, surface, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural de edificaciones, no contiene categorías de infraestructura que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"e08c4eb2-04da-4fc2-b721-a91beb8faeca","name":"24_Idioma modelos","desc":"Los LOI's y data del modelo Federado están estandarizados en el idioma del proyecto (todos los modelos individuales están exportados en el mismo idioma Ingles)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"d570b8a5-6a27-4f96-9ddf-4f8c42c7c02e","name":"25_Import Cad","desc":"No existen archivos importados en CAD","result":"Pass","failMsg":"","resultMsg":"","error":"","count":1,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"6c8e4173-7f12-4a9c-9909-3c453952d5e6","name":"26_Links Cad","desc":"No existen archivos vinculados en CAD","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"e1a657db-52f8-4808-8ce8-0138250e751f","name":"27_Links Rvt pinados","desc":"Los links de modelos de Revit se encuentran pinados","result":"Fail","failMsg":"Los links de modelos de Revit no se encuentran pinados","resultMsg":"","error":"","count":1,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"12acf37e-530a-4456-9367-82d5f705e348","name":"28_Nombre de Niveles","desc":"Los niveles se encuentran nombrados de acuerdo a lo indicado en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"7ddc07a6-ebb9-4b79-adc9-a338879a1a4e","name":"29_Nombre de Vistas","desc":"Las vistas se encuentran nombradas de acuerdo a lo indicado en el PEB","result":"Fail","failMsg":"Existen vistas que no están nombradas de acuerdo a la codificación del PEB Tabla 57. Nomenclatura vistas","resultMsg":"","error":"","count":9,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","checkId":"170620a0-ed14-43d7-8426-fe34f2539933","name":"30_LOG","desc":"El modelo cumple los el LOg minimo establecido en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"3479bdfe-b54b-45d6-91c5-d755716d026f","name":"01_Codificación Modelo","desc":"El modelo se encuentra codificado según lo establecido en el PEB.","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"dae3da2d-64e7-4703-84e9-429b83552e70","name":"02_Nombramiento y Codificación","desc":"Los campos de codificación están acordes al nombramiento y codificación del proyecto","result":"Pass","failMsg":"","resultMsg":"","error":"","count":1,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"31c099cb-f758-4663-8e34-50741e08fbe7","name":"03_Alertas","desc":"Existen warnings o alertas razonables menores a 20","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"ac0759ea-61a5-4e01-a4f0-a25284117170","name":"04_Familias In Situ","desc":"El modelo sólo contiene familias del sistema (no familias en sitio)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"f0305619-9ca5-4d9f-9552-c20be8771f44","name":"05_Formato/Versión","desc":"El modelo BIM se encuentra en el formato y versión 2026 según el PEB","result":"Pass","failMsg":"","resultMsg":"Autodesk Revit 2026 26.5.0.14","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"0e2f7a28-4072-47e8-9887-f4dc21f74ccc","name":"06_Codificación de Planos","desc":"Los planos están codificados de acuerdo al sistema de nombramiento y codificación definido en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"a40ba831-f940-4a1f-9176-56c016d7c17f","name":"07_Cantidad de  Planos","desc":"La cantidad de planos en PDF coincide con la cantidad de planos elaborados en el modelo.","result":"NA","failMsg":"Para esta etapa, este ítem no es objeto de validación, ya que el diseño se encuentra en proceso y aún no se cuenta con los planos necesarios para su verificación.","resultMsg":"","error":"","count":5,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"b222ea34-3968-4b64-9c6b-71f8cdc68c92","name":"08_Purge","desc":"El archivo se encuentra limpio o purgado","result":"Fail","failMsg":"El archivo debe estar completamente purgado. Asimismo, se debe verificar que la eliminación de vínculos e importaciones CAD no genere elementos residuales dentro del modelo","resultMsg":"","error":"","count":5,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"7cd965b9-c073-434a-a38f-602a6d293bef","name":"09_Tamaño Modelo","desc":"Peso del modelo menor a 250 MB","result":"Pass","failMsg":"","resultMsg":"9.97 MB","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"ece3e4a1-ec8c-4fb0-93de-7e85ee33f9ab","name":"10_Vista Coordinacion","desc":"La vista Coordinacion solo contiene elementos 3D","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"b87965ff-0770-417d-9a7a-c413b0dc7bdc","name":"11_Coordinacion","desc":"La vista Coordinacion solo contiene elementos 3D","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"d7bc733c-4eff-4906-b775-2f65001ae304","name":"12_Publish 3D_COORDINACION","desc":"Vista Coordinacion está configurada en Publish","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"a1251fa8-16c5-43f4-8048-23ad150853a2","name":"13_Publish Planos","desc":"Planos de Revit están configurados en Publish","result":"NA","failMsg":"Para esta etapa, este ítem no es objeto de validación, ya que el diseño se encuentra en proceso y aún no se cuenta con los planos necesarios para su verificación.","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"34e10091-866b-4f89-9e89-14f4ea6e840f","name":"14_Geolocalización","desc":"El modelo se encuentra Geolocalizado según sistema de coordenadas estaclecido en el PEB","result":"NA","failMsg":"El modelo corresponde a una tipología estándar. Su geolocalización será definida y gestionada mediante el modelo de urbanismo","resultMsg":"","error":"","count":5,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"fcaf3853-51ea-48c8-9964-7713ab433bf3","name":"15_Duplicados","desc":"No existen elementos duplicados","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"273b327b-4c7a-493c-8bcc-9aa77bd9c4cc","name":"16_Fase de objetos","desc":"Los elementos modelados cuentan con la información de fase (Construcción nueva, existente, demolición, etc)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"bf044059-0b9b-456c-84f5-b8f8a2393040","name":"17_Materiales","desc":"Los elementos de modelado cuentan con la información mínima requerida en cuanto a sus materiales","result":"Pass","failMsg":"","resultMsg":"","error":"","count":72,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"5fcb5780-e87b-470e-8882-803ba2bdc63b","name":"18_Nombre de Objetos","desc":"Validar que se haya utilizado una nomenclatura de los elementos según estándar de creación de objetos según lo indicado en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"5931d70b-94ce-4195-a28e-50a355245654","name":"19_Posición","desc":"Los elementos se encuentran correctamente posicionados espacialmente y/o referenciados en los niveles correspondientes.","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"e1a428ef-3ba1-462c-9c1a-d1328a7ea40c","name":"20_Objetos Arquitectónicos modelados con las categorías adecuadas","desc":"Los elementos arquitectónicos se han modelado con las categoria adecuadas (muros, puertas, ventanas, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural, no contiene categorías arquitectónicas que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"54861be3-1d79-4c30-a153-02a485a39030","name":"21_Objetos Estructurales modelados con las categorías adecuadas","desc":"Los elementos estructurales se han modelado con la categoria de elemento correspondiente, Ej.: Elemento: Columna → Tipo de Familia: Pilar Estructural o Structural Column","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"232e9ccf-aae0-49a3-bc97-23e3b013e6f5","name":"22_Objetos MEP modelados con las categorías adecuadas","desc":"Los elementos MEP se han modelado con las categoria adecuadas (tuberías, ductos, accesorios, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural, no contiene categorías MEP que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"8ff5416f-af5c-4387-a1ad-bf6ed69d5f61","name":"23_Objetos infraestructura modelados con las categorías adecuadas","desc":"Los elementos de insfraestructura se han modelado con las categoria adecuadas (3D solid, bloques 3D, aligments, surface, etc)","result":"NA","failMsg":"Debido a que el modelo corresponde a la disciplina estructural de edificaciones, no contiene categorías de infraestructura que deban ser objeto de evaluación","resultMsg":"","error":"","count":0,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"e08c4eb2-04da-4fc2-b721-a91beb8faeca","name":"24_Idioma modelos","desc":"Los LOI's y data del modelo Federado están estandarizados en el idioma del proyecto (todos los modelos individuales están exportados en el mismo idioma Ingles)","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"d570b8a5-6a27-4f96-9ddf-4f8c42c7c02e","name":"25_Import Cad","desc":"No existen archivos importados en CAD","result":"Pass","failMsg":"","resultMsg":"","error":"","count":1,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"6c8e4173-7f12-4a9c-9909-3c453952d5e6","name":"26_Links Cad","desc":"No existen archivos vinculados en CAD","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"e1a657db-52f8-4808-8ce8-0138250e751f","name":"27_Links Rvt pinados","desc":"Los links de modelos de Revit se encuentran pinados","result":"Fail","failMsg":"Los links de modelos de Revit no se encuentran pinados","resultMsg":"","error":"","count":1,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"12acf37e-530a-4456-9367-82d5f705e348","name":"28_Nombre de Niveles","desc":"Los niveles se encuentran nombrados de acuerdo a lo indicado en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"7ddc07a6-ebb9-4b79-adc9-a338879a1a4e","name":"29_Nombre de Vistas","desc":"Las vistas se encuentran nombradas de acuerdo a lo indicado en el PEB","result":"Fail","failMsg":"Existen vistas que no están nombradas de acuerdo a la codificación del PEB Tabla 57. Nomenclatura vistas","resultMsg":"","error":"","count":6,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001","checkId":"170620a0-ed14-43d7-8426-fe34f2539933","name":"30_LOG","desc":"El modelo cumple los el LOg minimo establecido en el PEB","result":"Pass","failMsg":"","resultMsg":"","error":"","count":0,"value":1}],"elementsEnc":{"f":["checkId","elementId","category","family","type","name","value","count","file"],"d":[["a40ba831-f940-4a1f-9176-56c016d7c17f","b222ea34-3968-4b64-9c6b-71f8cdc68c92","b87965ff-0770-417d-9a7a-c413b0dc7bdc","d7bc733c-4eff-4906-b775-2f65001ae304","a1251fa8-16c5-43f4-8048-23ad150853a2","34e10091-866b-4f89-9e89-14f4ea6e840f","bf044059-0b9b-456c-84f5-b8f8a2393040","5fcb5780-e87b-470e-8882-803ba2bdc63b","5931d70b-94ce-4195-a28e-50a355245654","e1a428ef-3ba1-462c-9c1a-d1328a7ea40c","54861be3-1d79-4c30-a153-02a485a39030","232e9ccf-aae0-49a3-bc97-23e3b013e6f5","8ff5416f-af5c-4387-a1ad-bf6ed69d5f61","e08c4eb2-04da-4fc2-b721-a91beb8faeca","d570b8a5-6a27-4f96-9ddf-4f8c42c7c02e","e1a657db-52f8-4808-8ce8-0138250e751f","12acf37e-530a-4456-9367-82d5f705e348","7ddc07a6-ebb9-4b79-adc9-a338879a1a4e","170620a0-ed14-43d7-8426-fe34f2539933","dae3da2d-64e7-4703-84e9-429b83552e70"],[-1,143297,143300,18435,18436,18437,18438,18439,18935,18939,18941,18942,18946,18957,18960,18974,18982,18984,18986,22806,22807,22808,24244,24245,27492,29224,78544,79117,134488,135528,145691,147649,147650,147651,147652,147653,147655,147656,164753,164754,164755,164756,336822,352677,353673,353675,353677,353679,353681,353683,353685,353687,353689,353691,353693,353695,353697,353699,449947,450621,521493,521576,593446,785344,785345,785348,785405,1431221,1432131,1432924,1433726,1433727,1433728,1559558,1724315,1724333,1844560,1850235,1850243,1850244,1850245,1850246,1850247,1850248,1850249,1850250,1850251,1850252,1850253,1850254,1850255,1850256,1855975,1856023,1856298,1861252,1875488,1875505,1859197,1876229,1877133,1877217,1877320,1877417,1877534,1878472,1878473,1878474,1878475,1878476,1878477,1911412,1922235,1924926,1926730,1926862,1927381,1927860,1928116,1928117,1928693,1928694,1928695,1928696,1928697,1928698,1929542,1929543,1929544,1929545,1929546,1929547,1929585,1929586,1929587,1929588,1929589,1929590,1929604,1929605,1929606,1929607,1929608,1929609,1929622,1929623,1929624,1929625,1929626,1929627,-2000196,1895397,30,1908144,32,29237,1686570,1686580,1686600,1847709,1850113,1887069,1887096,1887195,1887204,1887216,1891393,1895249,1895323,1908952,1910025,1917461,0,1685322,1685325,1685328,1685331,1685334,1685337,1685342,1685349,1685358,1685361,1689203,1680118,1680128,1685079,1688918,1689123,1689754,1690307,1678885,1695746,1678839,1678849,1678859,1678869,1691770,1693797],["","Materials","Structural Framing","Levels","Views"],["","VIGA-PERFIL-HEA","E-STD-METALICO-ASTM-A36-CTV"],["","VIGA-PERFIL-HEA_550mm","E-STD-METALICO-ASTM-A36-CTV-Ø=1/2''","NIVEL_TRIANGULAR_2.5mm","Floor Plan","Section","Three D","Legend"],["Combined Items","Survey Point Coordinate","Survey Point Elevation","Project Base Point Coordinate","Project Base Point Elevation","Project Base Point Rotation","Materials : Default","Materials : Default Floor","Materials : Default Roof","Materials : Default Wall","Materials : Glass","Materials : Earth","Materials : Concrete, Cast-in-Place gray","Materials : Brick, Common","Materials : Concrete Masonry Units","Materials : Metal Stud Layer","Materials : Plywood, Sheathing","Materials : Softwood, Lumber","Materials : Air","Materials : Vapor Retarder","Materials : Glass, Clear Glazing","Materials : Gypsum Wall Board","Materials : Phase - Demo","Materials : Phase - Exist","Materials : Phase - Temporary","Materials : Roofing, EPDM Membrane","Materials : Asphalt Shingle","Materials : Acoustic Ceiling Tile 600 x 600","Materials : Phase - New","Materials : Poche","Materials : Default Mass Floor","Materials : Polyvinyl Chloride, Rigid","Materials : Default Light Source","Materials : Default Form","Materials : Default Mass Zone","Materials : Default Mass Exterior Wall","Materials : Default Mass Interior Wall","Materials : Default Mass Roof","Materials : Default Mass Opening","Materials : Default Mass Shade","Materials : Default Mass Skylight","Materials : Steel, Carbon","Materials : Copper","Materials : Iron, Ductile","Materials : Stainless Steel","Materials : Wood - Stained","Materials : System-Zones","Materials : Analytical Spaces","Materials : Analytical Surface - Exterior Walls","Materials : Analytical Surface - Roofs","Materials : Analytical Surface - Slabs on Grade","Materials : Analytical Surface - Interior Walls","Materials : Analytical Surface - Interior Floors","Materials : Analytical Surface - Ceilings","Materials : Analytical Surface - Air Surfaces","Materials : Analytical Surface - Underground Walls","Materials : Analytical Surface - Operable Windows","Materials : Analytical Surface - Operable Skylights","Materials : Analytical Surface - Sliding Doors","Materials : Analytical Surface - Air Openings","Materials : Analytical Surface - Shades","Materials : Cabinets","Materials : Counter Top","Materials : Analytical Panels","Materials : Electrical Analytical Loads","Materials : Steel, Paint Finish, Dark Gray","Materials : Insulation - Duct Wrap","Materials : Insulation - Fiberglass","Materials : Lining - Fiberglass Board","Materials : Polyvinyl Chloride - Rigid","Materials : FixedBC","Materials : Pinned","Materials : Boundary Roller","Materials : YDirection","Materials : ZDirection","Materials : XDirection","Materials : Grade 250","Materials : Steel","Materials : Relleno","Materials : ACERO_ESTRUCTURAL_A500-GRC","Materials : Muro por defecto","Materials : Air Openings","Materials : Shades","Materials : Exterior Walls","Materials : Roofs","Materials : Slabs on Grade","Materials : Interior Walls","Materials : Interior Floors","Materials : Ceilings","Materials : Air Surfaces","Materials : Underground Walls","Materials : Operable Windows","Materials : Operable Skylights","Materials : Sliding Doors","Materials : Metal - Calibre delgado","Materials : Por defecto","Materials : Acero estructural - S235","Materials : Paneles analíticos","Materials : Steel ASTM A500, Grade B, Rectangular and Square","Materials : Steel ASTM A992","Materials : Acero ASTM A36","Structural Framing : VIGA-PERFIL-HEA : VIGA-PERFIL-HEA_550mm","Structural Framing : E-STD-METALICO-ASTM-A36-CTV : E-STD-METALICO-ASTM-A36-CTV-Ø=1/2''","Imports in Families","RVT Links : FE_ANI_0007_F2_PR19_TR000_ST000_ARQ_M3D_0001.rvt","Levels : NIVEL_TRIANGULAR_2.5mm","NE_NIVEL-ANDEN_+0.00m TRABAJO","NT_EMPLAZAMIENTO_+0.00m","NE_NIVEL-CIMENTACION_+1.05m TRABAJO","NE_NIVEL-CUBIERTA-1_+3.60m","NE_NIVEL-CORREAS-CUBIERTA-3_+8.12m","NE_NIVEL-CUBIERTA-1_+3.60m TRABAJO 1","NE_NIVEL-VIGAS-CUBIERTA-2_+8.12m TRABAJO","Section 1","Section 2","3D","NE_NIVEL-CIMENTACION_+1.15m","NE_NIVEL-PLACA_CONTRAPISO_+0.00m","LG_SIMBOLOGIA Copy 1","Section 3","Section 4","NE_NIVEL-CORREAS-CUBIERTA-2_+6.30","Section 5","Section 6","","Materials : Render Material 255-255-255","Materials : Render Material 0-0-255","Materials : Render Material 255-127-0","Materials : Render Material 255-191-0","Materials : Render Material 128-128-128","Materials : Render Material 255-0-0","Materials : Render Material 192-192-192","Materials : Render Material 255-0-63","Materials : Render Material 153-153-153","Materials : Render Material 204-204-204","RVT Links : FE_ANI_0007_F2_PR19_TR000_BA000_ARQ_M3D_0001.rvt","NE_NIVEL-PLATAFORMA_+0.00m","NE_NIVEL-CUBIERTA_+2.97m","NE_NIVEL-PISO-1_+0.12m","{3D - ssepulvedaXGTAP}","RVT Links : FE_ANI_0007_F2_PR19_TR000_SB000_ARQ_M3D_0001.rvt","NE_NIVEL-CUBIERTA_+3.07m","NE_NIVEL-BASE-TANQUE_-2.33m","NE_NIVEL-CUBIERTA-TANQUE_+0.00m"],["","0.00 m E/W  |  0.00 m N/S","0.00 m","0.00°","Structural Framing : VIGA-PERFIL-HEA : VIGA-PERFIL-HEA_550mm","Structural Framing : E-STD-METALICO-ASTM-A36-CTV : E-STD-METALICO-ASTM-A36-CTV-Ø=1/2''","NE_NIVEL-ANDEN_+0.00m TRABAJO","NE_NIVEL-CIMENTACION_+1.05m TRABAJO","NE_NIVEL-CORREAS-CUBIERTA-3_+8.12m","NE_NIVEL-CUBIERTA-1_+3.60m TRABAJO 1","NE_NIVEL-VIGAS-CUBIERTA-2_+8.12m TRABAJO","Section 1","Section 2","LG_SIMBOLOGIA Copy 1","Section 3","Section 4","Section 5","Section 6","{3D - ssepulvedaXGTAP}"],[299,0,1,15,5],["FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001","FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001","FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001"]],"r":[[0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,1,0],[3,0,0,0,0,0,0,1,0],[4,0,0,0,0,0,0,1,0],[5,1,0,0,0,1,1,2,0],[5,1,0,0,0,2,2,2,0],[5,2,0,0,0,3,1,2,0],[5,2,0,0,0,4,2,2,0],[5,2,0,0,0,5,3,2,0],[6,3,1,0,0,6,0,2,0],[6,4,1,0,0,7,0,2,0],[6,5,1,0,0,8,0,2,0],[6,6,1,0,0,9,0,2,0],[6,7,1,0,0,10,0,2,0],[6,8,1,0,0,11,0,2,0],[6,9,1,0,0,12,0,2,0],[6,10,1,0,0,13,0,2,0],[6,11,1,0,0,14,0,2,0],[6,12,1,0,0,15,0,2,0],[6,13,1,0,0,16,0,2,0],[6,14,1,0,0,17,0,2,0],[6,15,1,0,0,18,0,2,0],[6,16,1,0,0,19,0,2,0],[6,17,1,0,0,20,0,2,0],[6,18,1,0,0,21,0,2,0],[6,19,1,0,0,22,0,2,0],[6,20,1,0,0,23,0,2,0],[6,21,1,0,0,24,0,2,0],[6,22,1,0,0,25,0,2,0],[6,23,1,0,0,26,0,2,0],[6,24,1,0,0,27,0,2,0],[6,25,1,0,0,28,0,2,0],[6,26,1,0,0,29,0,2,0],[6,27,1,0,0,30,0,2,0],[6,28,1,0,0,31,0,2,0],[6,29,1,0,0,32,0,2,0],[6,30,1,0,0,33,0,2,0],[6,31,1,0,0,34,0,2,0],[6,32,1,0,0,35,0,2,0],[6,33,1,0,0,36,0,2,0],[6,34,1,0,0,37,0,2,0],[6,35,1,0,0,38,0,2,0],[6,36,1,0,0,39,0,2,0],[6,37,1,0,0,40,0,2,0],[6,38,1,0,0,41,0,2,0],[6,39,1,0,0,42,0,2,0],[6,40,1,0,0,43,0,2,0],[6,41,1,0,0,44,0,2,0],[6,42,1,0,0,45,0,2,0],[6,43,1,0,0,46,0,2,0],[6,44,1,0,0,47,0,2,0],[6,45,1,0,0,48,0,2,0],[6,46,1,0,0,49,0,2,0],[6,47,1,0,0,50,0,2,0],[6,48,1,0,0,51,0,2,0],[6,49,1,0,0,52,0,2,0],[6,50,1,0,0,53,0,2,0],[6,51,1,0,0,54,0,2,0],[6,52,1,0,0,55,0,2,0],[6,53,1,0,0,56,0,2,0],[6,54,1,0,0,57,0,2,0],[6,55,1,0,0,58,0,2,0],[6,56,1,0,0,59,0,2,0],[6,57,1,0,0,60,0,2,0],[6,58,1,0,0,61,0,2,0],[6,59,1,0,0,62,0,2,0],[6,60,1,0,0,63,0,2,0],[6,61,1,0,0,64,0,2,0],[6,62,1,0,0,65,0,2,0],[6,63,1,0,0,66,0,2,0],[6,64,1,0,0,67,0,2,0],[6,65,1,0,0,68,0,2,0],[6,66,1,0,0,69,0,2,0],[6,67,1,0,0,70,0,2,0],[6,68,1,0,0,71,0,2,0],[6,69,1,0,0,72,0,2,0],[6,70,1,0,0,73,0,2,0],[6,71,1,0,0,74,0,2,0],[6,72,1,0,0,75,0,2,0],[6,73,1,0,0,76,0,2,0],[6,74,1,0,0,77,0,2,0],[6,75,1,0,0,78,0,2,0],[6,76,1,0,0,79,0,2,0],[6,77,1,0,0,80,0,2,0],[6,78,1,0,0,81,0,2,0],[6,79,1,0,0,82,0,2,0],[6,80,1,0,0,83,0,2,0],[6,81,1,0,0,84,0,2,0],[6,82,1,0,0,85,0,2,0],[6,83,1,0,0,86,0,2,0],[6,84,1,0,0,87,0,2,0],[6,85,1,0,0,88,0,2,0],[6,86,1,0,0,89,0,2,0],[6,87,1,0,0,90,0,2,0],[6,88,1,0,0,91,0,2,0],[6,89,1,0,0,92,0,2,0],[6,90,1,0,0,93,0,2,0],[6,91,1,0,0,94,0,2,0],[6,92,1,0,0,95,0,2,0],[6,93,1,0,0,96,0,2,0],[6,94,1,0,0,97,0,2,0],[6,95,1,0,0,98,0,2,0],[6,96,1,0,0,99,0,2,0],[6,97,1,0,0,100,0,2,0],[7,98,2,1,1,101,4,2,0],[7,99,2,2,2,102,5,2,0],[7,100,2,2,2,102,0,2,0],[7,101,2,2,2,102,0,2,0],[7,102,2,2,2,102,0,2,0],[7,103,2,2,2,102,0,2,0],[7,104,2,2,2,102,0,2,0],[7,105,2,2,2,102,0,2,0],[7,106,2,2,2,102,0,2,0],[7,107,2,2,2,102,0,2,0],[7,108,2,2,2,102,0,2,0],[7,109,2,2,2,102,0,2,0],[7,110,2,2,2,102,0,2,0],[7,111,2,1,1,101,0,2,0],[7,112,2,1,1,101,0,2,0],[7,113,2,1,1,101,0,2,0],[7,114,2,2,2,102,0,2,0],[7,115,2,2,2,102,0,2,0],[7,116,2,2,2,102,0,2,0],[7,117,2,2,2,102,0,2,0],[7,118,2,2,2,102,0,2,0],[7,119,2,2,2,102,0,2,0],[7,120,2,2,2,102,0,2,0],[7,121,2,2,2,102,0,2,0],[7,122,2,2,2,102,0,2,0],[7,123,2,2,2,102,0,2,0],[7,124,2,2,2,102,0,2,0],[7,125,2,2,2,102,0,2,0],[7,126,2,2,2,102,0,2,0],[7,127,2,2,2,102,0,2,0],[7,128,2,2,2,102,0,2,0],[7,129,2,2,2,102,0,2,0],[7,130,2,2,2,102,0,2,0],[7,131,2,2,2,102,0,2,0],[7,132,2,2,2,102,0,2,0],[7,133,2,2,2,102,0,2,0],[7,134,2,2,2,102,0,2,0],[7,135,2,2,2,102,0,2,0],[7,136,2,2,2,102,0,2,0],[7,137,2,2,2,102,0,2,0],[7,138,2,2,2,102,0,2,0],[7,139,2,2,2,102,0,2,0],[7,140,2,2,2,102,0,2,0],[7,141,2,2,2,102,0,2,0],[7,142,2,2,2,102,0,2,0],[7,143,2,2,2,102,0,2,0],[7,144,2,2,2,102,0,2,0],[7,145,2,2,2,102,0,2,0],[7,146,2,2,2,102,0,2,0],[7,147,2,2,2,102,0,2,0],[7,148,2,2,2,102,0,2,0],[7,149,2,2,2,102,0,2,0],[8,0,0,0,0,0,0,1,0],[9,0,0,0,0,0,0,1,0],[10,0,0,0,0,0,0,1,0],[11,0,0,0,0,0,0,1,0],[12,0,0,0,0,0,0,1,0],[13,0,0,0,0,0,0,1,0],[14,150,0,0,0,103,0,2,0],[15,151,0,0,0,104,0,2,0],[16,152,3,0,3,105,0,2,0],[16,153,3,0,3,105,0,2,0],[17,154,4,0,4,106,6,2,0],[17,155,4,0,4,107,0,2,0],[17,156,4,0,4,108,7,2,0],[17,157,4,0,4,109,0,2,0],[17,158,4,0,4,110,8,2,0],[17,159,4,0,4,111,9,2,0],[17,160,4,0,4,112,10,2,0],[17,161,4,0,5,113,11,2,0],[17,162,4,0,5,114,12,2,0],[17,163,4,0,6,115,0,2,0],[17,164,4,0,4,116,0,2,0],[17,165,4,0,4,117,0,2,0],[17,166,4,0,7,118,13,2,0],[17,167,4,0,5,119,14,2,0],[17,168,4,0,5,120,15,2,0],[17,169,4,0,4,121,0,2,0],[17,170,4,0,5,122,16,2,0],[17,171,4,0,5,123,17,2,0],[18,0,0,0,0,0,0,1,0],[19,172,0,0,0,124,0,2,1],[0,0,0,0,0,0,0,3,1],[1,0,0,0,0,0,0,3,1],[2,0,0,0,0,0,0,1,1],[3,0,0,0,0,0,0,1,1],[4,0,0,0,0,0,0,1,1],[5,1,0,0,0,1,1,2,1],[5,1,0,0,0,2,2,2,1],[5,2,0,0,0,3,1,2,1],[5,2,0,0,0,4,2,2,1],[5,2,0,0,0,5,3,2,1],[6,3,1,0,0,6,0,2,1],[6,4,1,0,0,7,0,2,1],[6,5,1,0,0,8,0,2,1],[6,6,1,0,0,9,0,2,1],[6,7,1,0,0,10,0,2,1],[6,8,1,0,0,11,0,2,1],[6,9,1,0,0,12,0,2,1],[6,10,1,0,0,13,0,2,1],[6,11,1,0,0,14,0,2,1],[6,12,1,0,0,15,0,2,1],[6,13,1,0,0,16,0,2,1],[6,14,1,0,0,17,0,2,1],[6,15,1,0,0,18,0,2,1],[6,16,1,0,0,19,0,2,1],[6,17,1,0,0,20,0,2,1],[6,18,1,0,0,21,0,2,1],[6,19,1,0,0,22,0,2,1],[6,20,1,0,0,23,0,2,1],[6,21,1,0,0,24,0,2,1],[6,22,1,0,0,25,0,2,1],[6,23,1,0,0,26,0,2,1],[6,24,1,0,0,27,0,2,1],[6,25,1,0,0,28,0,2,1],[6,26,1,0,0,29,0,2,1],[6,27,1,0,0,30,0,2,1],[6,28,1,0,0,31,0,2,1],[6,29,1,0,0,32,0,2,1],[6,30,1,0,0,33,0,2,1],[6,31,1,0,0,34,0,2,1],[6,32,1,0,0,35,0,2,1],[6,33,1,0,0,36,0,2,1],[6,34,1,0,0,37,0,2,1],[6,35,1,0,0,38,0,2,1],[6,36,1,0,0,39,0,2,1],[6,37,1,0,0,40,0,2,1],[6,38,1,0,0,41,0,2,1],[6,39,1,0,0,42,0,2,1],[6,40,1,0,0,43,0,2,1],[6,41,1,0,0,44,0,2,1],[6,42,1,0,0,45,0,2,1],[6,43,1,0,0,46,0,2,1],[6,44,1,0,0,47,0,2,1],[6,45,1,0,0,48,0,2,1],[6,46,1,0,0,49,0,2,1],[6,47,1,0,0,50,0,2,1],[6,48,1,0,0,51,0,2,1],[6,49,1,0,0,52,0,2,1],[6,50,1,0,0,53,0,2,1],[6,51,1,0,0,54,0,2,1],[6,52,1,0,0,55,0,2,1],[6,53,1,0,0,56,0,2,1],[6,54,1,0,0,57,0,2,1],[6,55,1,0,0,58,0,2,1],[6,56,1,0,0,59,0,2,1],[6,57,1,0,0,60,0,2,1],[6,58,1,0,0,61,0,2,1],[6,59,1,0,0,62,0,2,1],[6,60,1,0,0,63,0,2,1],[6,61,1,0,0,64,0,2,1],[6,62,1,0,0,65,0,2,1],[6,63,1,0,0,66,0,2,1],[6,64,1,0,0,67,0,2,1],[6,65,1,0,0,68,0,2,1],[6,66,1,0,0,69,0,2,1],[6,67,1,0,0,70,0,2,1],[6,68,1,0,0,71,0,2,1],[6,69,1,0,0,72,0,2,1],[6,70,1,0,0,73,0,2,1],[6,71,1,0,0,74,0,2,1],[6,72,1,0,0,75,0,2,1],[6,73,1,0,0,76,0,2,1],[6,173,1,0,0,125,0,2,1],[6,174,1,0,0,126,0,2,1],[6,175,1,0,0,127,0,2,1],[6,176,1,0,0,128,0,2,1],[6,177,1,0,0,129,0,2,1],[6,178,1,0,0,130,0,2,1],[6,179,1,0,0,131,0,2,1],[6,180,1,0,0,132,0,2,1],[6,181,1,0,0,133,0,2,1],[6,182,1,0,0,134,0,2,1],[8,0,0,0,0,0,0,1,1],[9,0,0,0,0,0,0,1,1],[10,0,0,0,0,0,0,1,1],[11,0,0,0,0,0,0,1,1],[12,0,0,0,0,0,0,1,1],[13,0,0,0,0,0,0,1,1],[14,150,0,0,0,103,0,2,1],[15,183,0,0,0,135,0,2,1],[17,154,4,0,4,136,0,2,1],[17,155,4,0,4,107,0,2,1],[17,184,4,0,4,137,0,2,1],[17,185,4,0,4,138,0,2,1],[17,186,4,0,5,113,11,2,1],[17,187,4,0,5,114,12,2,1],[17,188,4,0,6,139,18,2,1],[17,189,4,0,5,119,14,2,1],[17,190,4,0,5,120,15,2,1],[18,0,0,0,0,0,0,1,1],[19,172,0,0,0,124,0,2,2],[0,0,0,0,0,0,0,4,2],[1,0,0,0,0,0,0,4,2],[2,0,0,0,0,0,0,1,2],[3,0,0,0,0,0,0,1,2],[4,0,0,0,0,0,0,1,2],[5,1,0,0,0,1,1,2,2],[5,1,0,0,0,2,2,2,2],[5,2,0,0,0,3,1,2,2],[5,2,0,0,0,4,2,2,2],[5,2,0,0,0,5,3,2,2],[6,3,1,0,0,6,0,2,2],[6,4,1,0,0,7,0,2,2],[6,5,1,0,0,8,0,2,2],[6,6,1,0,0,9,0,2,2],[6,7,1,0,0,10,0,2,2],[6,8,1,0,0,11,0,2,2],[6,9,1,0,0,12,0,2,2],[6,10,1,0,0,13,0,2,2],[6,11,1,0,0,14,0,2,2],[6,12,1,0,0,15,0,2,2],[6,13,1,0,0,16,0,2,2],[6,14,1,0,0,17,0,2,2],[6,15,1,0,0,18,0,2,2],[6,16,1,0,0,19,0,2,2],[6,17,1,0,0,20,0,2,2],[6,18,1,0,0,21,0,2,2],[6,19,1,0,0,22,0,2,2],[6,20,1,0,0,23,0,2,2],[6,21,1,0,0,24,0,2,2],[6,22,1,0,0,25,0,2,2],[6,23,1,0,0,26,0,2,2],[6,24,1,0,0,27,0,2,2],[6,25,1,0,0,28,0,2,2],[6,26,1,0,0,29,0,2,2],[6,27,1,0,0,30,0,2,2],[6,28,1,0,0,31,0,2,2],[6,29,1,0,0,32,0,2,2],[6,30,1,0,0,33,0,2,2],[6,31,1,0,0,34,0,2,2],[6,32,1,0,0,35,0,2,2],[6,33,1,0,0,36,0,2,2],[6,34,1,0,0,37,0,2,2],[6,35,1,0,0,38,0,2,2],[6,36,1,0,0,39,0,2,2],[6,37,1,0,0,40,0,2,2],[6,38,1,0,0,41,0,2,2],[6,39,1,0,0,42,0,2,2],[6,40,1,0,0,43,0,2,2],[6,41,1,0,0,44,0,2,2],[6,42,1,0,0,45,0,2,2],[6,43,1,0,0,46,0,2,2],[6,44,1,0,0,47,0,2,2],[6,45,1,0,0,48,0,2,2],[6,46,1,0,0,49,0,2,2],[6,47,1,0,0,50,0,2,2],[6,48,1,0,0,51,0,2,2],[6,49,1,0,0,52,0,2,2],[6,50,1,0,0,53,0,2,2],[6,51,1,0,0,54,0,2,2],[6,52,1,0,0,55,0,2,2],[6,53,1,0,0,56,0,2,2],[6,54,1,0,0,57,0,2,2],[6,55,1,0,0,58,0,2,2],[6,56,1,0,0,59,0,2,2],[6,57,1,0,0,60,0,2,2],[6,58,1,0,0,61,0,2,2],[6,59,1,0,0,62,0,2,2],[6,60,1,0,0,63,0,2,2],[6,61,1,0,0,64,0,2,2],[6,62,1,0,0,65,0,2,2],[6,63,1,0,0,66,0,2,2],[6,64,1,0,0,67,0,2,2],[6,65,1,0,0,68,0,2,2],[6,66,1,0,0,69,0,2,2],[6,67,1,0,0,70,0,2,2],[6,68,1,0,0,71,0,2,2],[6,69,1,0,0,72,0,2,2],[6,70,1,0,0,73,0,2,2],[6,71,1,0,0,74,0,2,2],[6,72,1,0,0,75,0,2,2],[6,73,1,0,0,76,0,2,2],[6,191,1,0,0,79,0,2,2],[8,0,0,0,0,0,0,1,2],[9,0,0,0,0,0,0,1,2],[10,0,0,0,0,0,0,1,2],[11,0,0,0,0,0,0,1,2],[12,0,0,0,0,0,0,1,2],[13,0,0,0,0,0,0,1,2],[14,150,0,0,0,103,0,2,2],[15,192,0,0,0,140,0,2,2],[17,193,4,0,4,138,0,2,2],[17,194,4,0,4,141,0,2,2],[17,195,4,0,4,142,0,2,2],[17,196,4,0,4,107,0,2,2],[17,197,4,0,4,143,0,2,2],[17,198,4,0,5,113,11,2,2],[18,0,0,0,0,0,0,1,2]]}},"ifc":{"files":[{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","discipline":"EST","disciplineLabel":"Structural"},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","discipline":"EST","disciplineLabel":"Structural"},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","discipline":"EST","disciplineLabel":"Structural"}],"disciplines":["EST"],"checkNamesOrder":["01_Schema IFC","02_Ifc Project","03_Site","04_Facility","05_Tipos de Objetos IFC","06_Modelo IFC integrado y geolocalizado","07_cPset_GeographicLocation","08_ePset_SpaceCommon","09_Pset_DoorCommon","10_Pset_EnvironmentalCondition","11_Pset_ManufacturerTypeInformation","12_Pset_MaterialCommon","13_Pset_ProcessCapacity","14_Pset_ProjectCommon","15_Pset_ServiceLife","16_Pset_SpaceOccupancyRequirements","17_Pset_TransportElementCommon","18_Pset_Warranty","19_Pset_WorkControlCommon","20_Qto_FacilityPartBaseQuantities"],"checks":[{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"01-ifc","name":"01_Schema IFC","desc":"El modelo IFC se encuentra exportado en el schema 4.3 establecido en el PEB ","result":"Pass","failMsg":"","resultMsg":"IFC4X3_ADD2","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"02-ifc","name":"02_Ifc Project","desc":"El IFC Project está debidamente diligenciado como LOTE 1","result":"Pass","failMsg":"","resultMsg":"LOTE 1","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"03-ifc","name":"03_Site","desc":"El modelo IFC cuenta con el Site y está diligenciado como TRAMO 0001 o TRAMO 0002","result":"Pass","failMsg":"","resultMsg":"TRAMO 0000","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"04-ifc","name":"04_Facility","desc":"El modelo IFC cuenta con Building o Facility o Bridge o Railway o Road y está bien diligenciado","result":"Fail","failMsg":"Corregir el nombre del facility Name y del building Name a CENTRO PROCESAMIENTO DE BASURAS","resultMsg":"IfcBuilding: BASURAS CTC","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"05-ifc","name":"05_Tipos de Objetos IFC","desc":"Los objetos están clasificados según el tipo IFC 4.3 según la Building Smart","result":"Pass","failMsg":"","resultMsg":"6 IfcClass in 55 objects - detail in 'Ifc Elements'","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"06-ifc","name":"06_Modelo IFC integrado y geolocalizado","desc":"Al integrar los modelos IFC estos se encuentran geolozalizados y coordinados","result":"NA","failMsg":"El modelo corresponde a una tipología estándar. Su geolocalización será definida y gestionada mediante el modelo de urbanismo","resultMsg":"","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"07-ifc","name":"07_cPset_GeographicLocation","desc":"Están diligenciados correctamente los parámetros del cPset_GeographicLocation","result":"Pass","failMsg":"","resultMsg":"4 parameters in 1 elements","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"08-ifc","name":"08_ePset_SpaceCommon","desc":"Están diligenciados correctamente los parámetros del ePset_SpaceCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"09-ifc","name":"09_Pset_DoorCommon","desc":"Están diligenciados correctamente los parámetros del Pset_DoorCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"10-ifc","name":"10_Pset_EnvironmentalCondition","desc":"Están diligenciados correctamente los parámetros del Pset_EnvironmentalCondition","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"11-ifc","name":"11_Pset_ManufacturerTypeInformation","desc":"Están diligenciados correctamente los parámetros del Pset_ManufacturerTypeInformation","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"12-ifc","name":"12_Pset_MaterialCommon","desc":"Están diligenciados correctamente los parámetros del Pset_MaterialCommon","result":"Pass","failMsg":"","resultMsg":"7 parameters in 2 elements","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"13-ifc","name":"13_Pset_ProcessCapacity","desc":"Están diligenciados correctamente los parámetros del Pset_ProcessCapacity","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"14-ifc","name":"14_Pset_ProjectCommon","desc":"Están diligenciados correctamente los parámetros del Pset_ProjectCommon","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"15-ifc","name":"15_Pset_ServiceLife","desc":"Están diligenciados correctamente los parámetros del Pset_ServiceLife","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"16-ifc","name":"16_Pset_SpaceOccupancyRequirements","desc":"Están diligenciados correctamente los parámetros del Pset_SpaceOccupancyRequirements","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"17-ifc","name":"17_Pset_TransportElementCommon","desc":"Están diligenciados correctamente los parámetros del Pset_TransportElementCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"18-ifc","name":"18_Pset_Warranty","desc":"Están diligenciados correctamente los parámetros del Pset_Warranty","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"19-ifc","name":"19_Pset_WorkControlCommon","desc":"Están diligenciados correctamente los parámetros del Pset_WorkControlCommon","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","checkId":"20-ifc","name":"20_Qto_FacilityPartBaseQuantities","desc":"Están diligenciados correctamente los parámetros del Qto_FacilityPartBaseQuantities","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"01-ifc","name":"01_Schema IFC","desc":"El modelo IFC se encuentra exportado en el schema 4.3 establecido en el PEB ","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"schema_identifiers not found in the model","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"02-ifc","name":"02_Ifc Project","desc":"El IFC Project está debidamente diligenciado como LOTE 1","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"IfcProject not found","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"03-ifc","name":"03_Site","desc":"El modelo IFC cuenta con el Site y está diligenciado como TRAMO 0001 o TRAMO 0002","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"IfcSite not found","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"04-ifc","name":"04_Facility","desc":"El modelo IFC cuenta con Building o Facility o Bridge o Railway o Road y está bien diligenciado","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"No Building/Facility/Railway/Road/Bridge found","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"05-ifc","name":"05_Tipos de Objetos IFC","desc":"Los objetos están clasificados según el tipo IFC 4.3 según la Building Smart","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"No IfcClass found","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"06-ifc","name":"06_Modelo IFC integrado y geolocalizado","desc":"Al integrar los modelos IFC estos se encuentran geolozalizados y coordinados","result":"NA","failMsg":"El modelo corresponde a una tipología estándar. Su geolocalización será definida y gestionada mediante el modelo de urbanismo","resultMsg":"","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"07-ifc","name":"07_cPset_GeographicLocation","desc":"Están diligenciados correctamente los parámetros del cPset_GeographicLocation","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"08-ifc","name":"08_ePset_SpaceCommon","desc":"Están diligenciados correctamente los parámetros del ePset_SpaceCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"09-ifc","name":"09_Pset_DoorCommon","desc":"Están diligenciados correctamente los parámetros del Pset_DoorCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"10-ifc","name":"10_Pset_EnvironmentalCondition","desc":"Están diligenciados correctamente los parámetros del Pset_EnvironmentalCondition","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"11-ifc","name":"11_Pset_ManufacturerTypeInformation","desc":"Están diligenciados correctamente los parámetros del Pset_ManufacturerTypeInformation","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"12-ifc","name":"12_Pset_MaterialCommon","desc":"Están diligenciados correctamente los parámetros del Pset_MaterialCommon","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"13-ifc","name":"13_Pset_ProcessCapacity","desc":"Están diligenciados correctamente los parámetros del Pset_ProcessCapacity","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"14-ifc","name":"14_Pset_ProjectCommon","desc":"Están diligenciados correctamente los parámetros del Pset_ProjectCommon","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"15-ifc","name":"15_Pset_ServiceLife","desc":"Están diligenciados correctamente los parámetros del Pset_ServiceLife","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"16-ifc","name":"16_Pset_SpaceOccupancyRequirements","desc":"Están diligenciados correctamente los parámetros del Pset_SpaceOccupancyRequirements","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"17-ifc","name":"17_Pset_TransportElementCommon","desc":"Están diligenciados correctamente los parámetros del Pset_TransportElementCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"18-ifc","name":"18_Pset_Warranty","desc":"Están diligenciados correctamente los parámetros del Pset_Warranty","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"19-ifc","name":"19_Pset_WorkControlCommon","desc":"Están diligenciados correctamente los parámetros del Pset_WorkControlCommon","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","checkId":"20-ifc","name":"20_Qto_FacilityPartBaseQuantities","desc":"Están diligenciados correctamente los parámetros del Qto_FacilityPartBaseQuantities","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"01-ifc","name":"01_Schema IFC","desc":"El modelo IFC se encuentra exportado en el schema 4.3 establecido en el PEB ","result":"Pass","failMsg":"","resultMsg":"IFC4X3_ADD2","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"02-ifc","name":"02_Ifc Project","desc":"El IFC Project está debidamente diligenciado como LOTE 1","result":"Pass","failMsg":"","resultMsg":"LOTE 1","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"03-ifc","name":"03_Site","desc":"El modelo IFC cuenta con el Site y está diligenciado como TRAMO 0001 o TRAMO 0002","result":"Pass","failMsg":"","resultMsg":"TRAMO 0000","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"04-ifc","name":"04_Facility","desc":"El modelo IFC cuenta con Building o Facility o Bridge o Railway o Road y está bien diligenciado","result":"Fail","failMsg":"Corregir el nombre del facility Name y del building Name a ESTACION DE PASAJEROS","resultMsg":"IfcBuilding: ESTACION DE PASAJEROS Y CTC","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"05-ifc","name":"05_Tipos de Objetos IFC","desc":"Los objetos están clasificados según el tipo IFC 4.3 según la Building Smart","result":"Pass","failMsg":"","resultMsg":"10 IfcClass in 1025 objects - detail in 'Ifc Elements'","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"06-ifc","name":"06_Modelo IFC integrado y geolocalizado","desc":"Al integrar los modelos IFC estos se encuentran geolozalizados y coordinados","result":"NA","failMsg":"El modelo corresponde a una tipología estándar. Su geolocalización será definida y gestionada mediante el modelo de urbanismo","resultMsg":"","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"07-ifc","name":"07_cPset_GeographicLocation","desc":"Están diligenciados correctamente los parámetros del cPset_GeographicLocation","result":"Pass","failMsg":"","resultMsg":"4 parameters in 1 elements","error":"","count":null,"value":1},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"08-ifc","name":"08_ePset_SpaceCommon","desc":"Están diligenciados correctamente los parámetros del ePset_SpaceCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"09-ifc","name":"09_Pset_DoorCommon","desc":"Están diligenciados correctamente los parámetros del Pset_DoorCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"10-ifc","name":"10_Pset_EnvironmentalCondition","desc":"Están diligenciados correctamente los parámetros del Pset_EnvironmentalCondition","result":"Fail","failMsg":"El modelo IFC no se exportó correctamente, por lo que no es posible validar la información contenida en el modelo. Se requiere corregir la exportación y volver a cargar el archivo para su revisión.","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"11-ifc","name":"11_Pset_ManufacturerTypeInformation","desc":"Están diligenciados correctamente los parámetros del Pset_ManufacturerTypeInformation","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"12-ifc","name":"12_Pset_MaterialCommon","desc":"Están diligenciados correctamente los parámetros del Pset_MaterialCommon","result":"Fail","failMsg":"Materiales asignados están mal nombrados. Validar y ver detalle","resultMsg":"7 parameters in 21 elements","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"13-ifc","name":"13_Pset_ProcessCapacity","desc":"Están diligenciados correctamente los parámetros del Pset_ProcessCapacity","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"14-ifc","name":"14_Pset_ProjectCommon","desc":"Están diligenciados correctamente los parámetros del Pset_ProjectCommon","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"15-ifc","name":"15_Pset_ServiceLife","desc":"Están diligenciados correctamente los parámetros del Pset_ServiceLife","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"16-ifc","name":"16_Pset_SpaceOccupancyRequirements","desc":"Están diligenciados correctamente los parámetros del Pset_SpaceOccupancyRequirements","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"17-ifc","name":"17_Pset_TransportElementCommon","desc":"Están diligenciados correctamente los parámetros del Pset_TransportElementCommon","result":"NA","failMsg":"El Pset no aplica para la disciplina de estructuras","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":-2},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"18-ifc","name":"18_Pset_Warranty","desc":"Están diligenciados correctamente los parámetros del Pset_Warranty","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"19-ifc","name":"19_Pset_WorkControlCommon","desc":"Están diligenciados correctamente los parámetros del Pset_WorkControlCommon","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0},{"file":"FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc","checkId":"20-ifc","name":"20_Qto_FacilityPartBaseQuantities","desc":"Están diligenciados correctamente los parámetros del Qto_FacilityPartBaseQuantities","result":"Fail","failMsg":"El Pset no se encuentra creado dentro del archivo IFC. Se solicita realizar una nueva exportación del modelo utilizando el archivo TXT de configuración socializado durante las capacitaciones","resultMsg":"Pset no existente en el modelo","error":"","count":null,"value":0}],"elementsEnc":{"f":["file","checkId","parameter","value","element","ifcClass","globalId"],"d":[["FE_ANI_0007_F2_PR19_TR000_BA000_EST_M3D_0001.ifc","FE_ANI_0007_F2_PR19_TR000_SB000_EST_M3D_0001.ifc","FE_ANI_0007_F2_PR19_TR000_ST000_EST_M3D_0001.ifc"],["05-ifc","07-ifc","08-ifc","09-ifc","10-ifc","11-ifc","12-ifc","13-ifc","14-ifc","15-ifc","16-ifc","17-ifc","18-ifc","19-ifc","20-ifc"],["IfcColumn","IfcBeam","IfcFooting","IfcRamp","IfcRampFlight","IfcSlab","GlobalId","Longitude","Latitude","Altitude","Pset no existente en el modelo","Material Layer 1","Thickness Layer 1","GlobalId (IFC TYPE)","Material Layer 1 (IFC TYPE)","Thickness Layer 1 (IFC TYPE)","Type Name (IFC TYPE)","No IfcClass found","IfcMember","IfcWall","IfcStair","IfcStairFlight"],[28,12,7,3,2,"1cRWlrl8v3WOHEQOEdehiw","0.000 m","","25C8MsiNjFXg$O_18KXDb0","CONCRETO_REFORZADO_21MPa","0.150 m","1wey$UWOb7UuczitXrdo$m","IfcSlabType","0AFjQSq0b3whuZ6Zbi1ZO9","3fXKmLn7TAWBv1b2u4IOMF",487,266,165,72,14,8,6,5,1,"3TAPXLKcfBMeYOrRFYcwC7","0yZ4kxFfvCH9O0imL_P257","0o7QwJegDCLvIs6NswR9ZX","IfcWallType","3UUbtQ6_v3ABDlzxERT10f","2hQ7LxO1XFjf$5KIa3pOsi","0hw8jo$OXCJur_ybtZO3Ot","0AtlnxCLz2mPyS330nGVTp","1VTBjRfqH0tOhNxZTZiGvx","33Vtauhc99A82wrceeWKcx","0ABIisr8rEguthWp5z3elw","1HNCsnEojDcwVOQKPsSQr1","1iTuWfU19ESQiFq1dHQ6AA","1ESLsT0NnFtvVNA9wE7EH_","1uiDBDjVPCyQHhBzxGU8Gl","0lPG9krk9D6QbDUb2Mz9Xk","2yQPhpgSP31AG2yPKBOR4T","17MCy86QLBdhAaN4f6gqk2","0.100 m","3cpgpLk8H45QRtCELHeSQ_","2LqcVDef95yxg4Qs5HHzFu","2z_lWc9cTCfhzYZ0J7EdY5","212CHkl1rD0RhuqL67kQRS","0mO9jnJsP4aAkEFPHPhSks","3u5k3EJenDlR$ZGaF4RgP3","2ZqD73whPAghwAYQjpHVUl","1rdFwDjobCn9D5$uJIlSMm","1oXvRo58nDg83dc0dix39Y"],["","IfcSite::TRAMO 0000","IfcSlab::Floor:PLACA_CONCRETO_E0.15:1680169","IfcSlab::Floor:PLACA-CUBIERTA_CONCRETO_E0.15:1683489","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1747945","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748384","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748354","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748366","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748376","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748320","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748330","IfcWall::Basic Wall:MURO_CONCRETO_E0.15m:1748340","IfcSlab::Floor:PLACA-ANDEN-ESTACION_CONCRETO-PREFABRICADO_E0.15:1746963:4","IfcSlab::Floor:PLACA-ANDEN-ESTACION_CONCRETO-PREFABRICADO_E0.15:1746963","IfcSlab::Floor:PLACA-ANDEN-ESTACION_CONCRETO-PREFABRICADO_E0.15:1746963:3","IfcSlab::Floor:PLACA-ANDEN-ESTACION_CONCRETO-PREFABRICADO_E0.15:1746963:2","IfcSlab::Floor:PLACA-ANDEN-ESTACION_CONCRETO-PREFABRICADO_E0.15:1708117","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.10:1722611","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.15:1748487:2","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.10:1720760","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.10:1720786","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.10:1730345","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.15:1748487","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.15:1748487:4","IfcSlab::Floor:PLACA-CUBIERTA-ESTACION_CONCRETO-PREFABRICADO_E0.15:1748487:3"],["IfcColumn","IfcBeam","IfcFooting","IfcRamp","IfcRampFlight","IfcSlab","IfcSite","","IfcMember","IfcWall","IfcStair","IfcStairFlight"],["","3h5lzIwcfF$OCjoGc15PGX","1VNsz5d9r6LfJcGVIZAcU0","1VNsz5d9r6LfJcGVIZAdI8","2TAYY2yyf8ng_tm$td3QvL","0fVV5SUvX8$O1GektSbV99","0fVV5SUvX8$O1GektSbVG0","0fVV5SUvX8$O1GektSbVGY","0fVV5SUvX8$O1GektSbVGk","0fVV5SUvX8$O1GektSbVGu","0fVV5SUvX8$O1GektSbVJ0","0fVV5SUvX8$O1GektSbVJA","0fVV5SUvX8$O1GektSbVJK","0jYRPN3VwSlt9LQ57X6DpD","2WD8qGtMr03fDV_DE47e$5","3PORD62gLvmCjP5J4yNxqW","3XtpVvRb67HK6N$v_cGWlT","3YULnZoVHB99KsoLikPytX","0TGzpBkfL0mfwsfk$vgLv9","0mSjk1F91Qalfp6DItsm6j","1STCsGEDT4QB6PxFLRtWoP","1STCsGEDT4QB6PxFLRtWpp","1nuO46g0v6uvvDPv8ibkoY","2AdmjV_p5BwgPGs7sbJCFK","2EOCIYfJctWgRUslrpQaF6","3PWZk2cvgq0UEm6QH1dGZs"]],"r":[[0,0,0,0,0,0,0],[0,0,1,1,0,1,0],[0,0,2,2,0,2,0],[0,0,3,3,0,3,0],[0,0,4,3,0,4,0],[0,0,5,4,0,5,0],[0,1,6,5,1,6,1],[0,1,7,6,1,6,1],[0,1,8,6,1,6,1],[0,1,9,6,1,6,1],[0,2,10,7,0,7,0],[0,3,10,7,0,7,0],[0,4,10,7,0,7,0],[0,5,10,7,0,7,0],[0,6,6,8,2,5,2],[0,6,11,9,2,5,2],[0,6,12,10,2,5,2],[0,6,13,11,2,5,2],[0,6,14,9,2,5,2],[0,6,15,10,2,5,2],[0,6,16,12,2,5,2],[0,6,6,13,3,5,3],[0,6,11,9,3,5,3],[0,6,12,10,3,5,3],[0,6,13,14,3,5,3],[0,6,14,9,3,5,3],[0,6,15,10,3,5,3],[0,6,16,12,3,5,3],[0,7,10,7,0,7,0],[0,8,10,7,0,7,0],[0,9,10,7,0,7,0],[0,10,10,7,0,7,0],[0,11,10,7,0,7,0],[0,12,10,7,0,7,0],[0,13,10,7,0,7,0],[0,14,10,7,0,7,0],[1,0,17,7,0,7,0],[1,1,10,7,0,7,0],[1,2,10,7,0,7,0],[1,3,10,7,0,7,0],[1,4,10,7,0,7,0],[1,5,10,7,0,7,0],[1,6,10,7,0,7,0],[1,7,10,7,0,7,0],[1,8,10,7,0,7,0],[1,9,10,7,0,7,0],[1,10,10,7,0,7,0],[1,11,10,7,0,7,0],[1,12,10,7,0,7,0],[1,13,10,7,0,7,0],[1,14,10,7,0,7,0],[2,0,1,15,0,1,0],[2,0,18,16,0,8,0],[2,0,0,17,0,0,0],[2,0,2,18,0,2,0],[2,0,5,19,0,5,0],[2,0,19,20,0,9,0],[2,0,4,21,0,4,0],[2,0,3,22,0,3,0],[2,0,20,23,0,10,0],[2,0,21,23,0,11,0],[2,1,6,24,1,6,4],[2,1,7,6,1,6,4],[2,1,8,6,1,6,4],[2,1,9,6,1,6,4],[2,2,10,7,0,7,0],[2,3,10,7,0,7,0],[2,4,10,7,0,7,0],[2,5,10,7,0,7,0],[2,6,6,25,4,9,5],[2,6,11,9,4,9,5],[2,6,12,10,4,9,5],[2,6,13,26,4,9,5],[2,6,14,9,4,9,5],[2,6,15,10,4,9,5],[2,6,16,27,4,9,5],[2,6,6,28,5,9,6],[2,6,11,9,5,9,6],[2,6,12,10,5,9,6],[2,6,13,26,5,9,6],[2,6,14,9,5,9,6],[2,6,15,10,5,9,6],[2,6,16,27,5,9,6],[2,6,6,29,6,9,7],[2,6,11,9,6,9,7],[2,6,12,10,6,9,7],[2,6,13,26,6,9,7],[2,6,14,9,6,9,7],[2,6,15,10,6,9,7],[2,6,16,27,6,9,7],[2,6,6,30,7,9,8],[2,6,11,9,7,9,8],[2,6,12,10,7,9,8],[2,6,13,26,7,9,8],[2,6,14,9,7,9,8],[2,6,15,10,7,9,8],[2,6,16,27,7,9,8],[2,6,6,31,8,9,9],[2,6,11,9,8,9,9],[2,6,12,10,8,9,9],[2,6,13,26,8,9,9],[2,6,14,9,8,9,9],[2,6,15,10,8,9,9],[2,6,16,27,8,9,9],[2,6,6,32,9,9,10],[2,6,11,9,9,9,10],[2,6,12,10,9,9,10],[2,6,13,26,9,9,10],[2,6,14,9,9,9,10],[2,6,15,10,9,9,10],[2,6,16,27,9,9,10],[2,6,6,33,10,9,11],[2,6,11,9,10,9,11],[2,6,12,10,10,9,11],[2,6,13,26,10,9,11],[2,6,14,9,10,9,11],[2,6,15,10,10,9,11],[2,6,16,27,10,9,11],[2,6,6,34,11,9,12],[2,6,11,9,11,9,12],[2,6,12,10,11,9,12],[2,6,13,26,11,9,12],[2,6,14,9,11,9,12],[2,6,15,10,11,9,12],[2,6,16,27,11,9,12],[2,6,6,35,12,5,13],[2,6,11,9,12,5,13],[2,6,12,10,12,5,13],[2,6,13,36,12,5,13],[2,6,14,9,12,5,13],[2,6,15,10,12,5,13],[2,6,16,12,12,5,13],[2,6,6,37,13,5,14],[2,6,11,9,13,5,14],[2,6,12,10,13,5,14],[2,6,13,36,13,5,14],[2,6,14,9,13,5,14],[2,6,15,10,13,5,14],[2,6,16,12,13,5,14],[2,6,6,38,14,5,15],[2,6,11,9,14,5,15],[2,6,12,10,14,5,15],[2,6,13,36,14,5,15],[2,6,14,9,14,5,15],[2,6,15,10,14,5,15],[2,6,16,12,14,5,15],[2,6,6,39,15,5,16],[2,6,11,9,15,5,16],[2,6,12,10,15,5,16],[2,6,13,36,15,5,16],[2,6,14,9,15,5,16],[2,6,15,10,15,5,16],[2,6,16,12,15,5,16],[2,6,6,40,16,5,17],[2,6,11,9,16,5,17],[2,6,12,10,16,5,17],[2,6,13,36,16,5,17],[2,6,14,9,16,5,17],[2,6,15,10,16,5,17],[2,6,16,12,16,5,17],[2,6,6,41,17,5,18],[2,6,11,9,17,5,18],[2,6,12,42,17,5,18],[2,6,13,43,17,5,18],[2,6,14,9,17,5,18],[2,6,15,42,17,5,18],[2,6,16,12,17,5,18],[2,6,6,44,18,5,19],[2,6,11,9,18,5,19],[2,6,12,10,18,5,19],[2,6,13,45,18,5,19],[2,6,14,9,18,5,19],[2,6,15,10,18,5,19],[2,6,16,12,18,5,19],[2,6,6,46,19,5,20],[2,6,11,9,19,5,20],[2,6,12,42,19,5,20],[2,6,13,43,19,5,20],[2,6,14,9,19,5,20],[2,6,15,42,19,5,20],[2,6,16,12,19,5,20],[2,6,6,47,20,5,21],[2,6,11,9,20,5,21],[2,6,12,42,20,5,21],[2,6,13,43,20,5,21],[2,6,14,9,20,5,21],[2,6,15,42,20,5,21],[2,6,16,12,20,5,21],[2,6,6,48,21,5,22],[2,6,11,9,21,5,22],[2,6,12,42,21,5,22],[2,6,13,43,21,5,22],[2,6,14,9,21,5,22],[2,6,15,42,21,5,22],[2,6,16,12,21,5,22],[2,6,6,49,22,5,23],[2,6,11,9,22,5,23],[2,6,12,10,22,5,23],[2,6,13,45,22,5,23],[2,6,14,9,22,5,23],[2,6,15,10,22,5,23],[2,6,16,12,22,5,23],[2,6,6,50,23,5,24],[2,6,11,9,23,5,24],[2,6,12,10,23,5,24],[2,6,13,45,23,5,24],[2,6,14,9,23,5,24],[2,6,15,10,23,5,24],[2,6,16,12,23,5,24],[2,6,6,51,24,5,25],[2,6,11,9,24,5,25],[2,6,12,10,24,5,25],[2,6,13,45,24,5,25],[2,6,14,9,24,5,25],[2,6,15,10,24,5,25],[2,6,16,12,24,5,25],[2,7,10,7,0,7,0],[2,8,10,7,0,7,0],[2,9,10,7,0,7,0],[2,10,10,7,0,7,0],[2,11,10,7,0,7,0],[2,12,10,7,0,7,0],[2,13,10,7,0,7,0],[2,14,10,7,0,7,0]]}},"responses":[],"responsesMeta":{"sourceFiles":[],"totalResponses":0}}</script>
+<script>
+(function () {
+  "use strict";
+
+  var DATA = JSON.parse(document.getElementById('report-data').textContent);
+  var META = DATA.meta;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function pad(n) { return String(n).length < 2 ? '0' + n : String(n); }
+  function timestampSlug() {
+    var d = new Date();
+    return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes());
+  }
+  function slugify(s) {
+    return String(s || 'report').replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '');
+  }
+
+  function computeStats(list) {
+    var pass = 0, fail = 0, na = 0;
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i].result;
+      if (r === 'Pass') pass++;
+      else if (r === 'Fail') fail++;
+      else na++;
+    }
+    var evaluated = pass + fail;
+    var pct = evaluated > 0 ? (pass / evaluated) * 100 : null;
+    return { pass: pass, fail: fail, na: na, total: list.length, evaluated: evaluated, pct: pct };
+  }
+
+  function pctColorClass(pct) {
+    if (pct === null || pct === undefined) return { text: 'c-na', bg: '', ring: 'var(--grey-300)' };
+    if (pct < 50) return { text: 'c-red', bg: 'bg-red', ring: 'var(--red)' };
+    if (pct <= 75) return { text: 'c-orange', bg: 'bg-orange', ring: 'var(--orange)' };
+    if (pct <= 90) return { text: 'c-azure', bg: 'bg-azure', ring: 'var(--azure)' };
+    return { text: 'c-green', bg: 'bg-green', ring: 'var(--vert-600)' };
+  }
+
+  // Never show 100% (or 0%) in the ring unless it is exactly that — 99.5% with
+  // four Fails must not read as "100%".
+  function ringLabel(pct) {
+    if (pct >= 100) return '100%';
+    if (pct <= 0) return '0%';
+    return Math.min(99, Math.max(1, Math.round(pct))) + '%';
+  }
+
+  function fmtPct(pct) {
+    return pct === null || pct === undefined ? '—' : pct.toFixed(1) + '%';
+  }
+
+  function iconSvg(result) {
+    if (result === 'Pass') {
+      return '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="var(--vert-600)"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    if (result === 'Fail') {
+      return '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="var(--red)"/><path d="M8 8l8 8M16 8l-8 8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>';
+    }
+    return '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="var(--grey-300)"/><path d="M7 12h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('export-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'export-toast';
+      t.className = 'export-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    requestAnimationFrame(function () { t.classList.add('show'); });
+    clearTimeout(t._hideTimer);
+    t._hideTimer = setTimeout(function () { t.classList.remove('show'); }, 2600);
+  }
+
+  function triggerDownload(obj, filename) {
+    var jsonStr = JSON.stringify(obj, null, 2);
+    var blob = new Blob([jsonStr], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // ---------------------------------------------------------------
+  // Combo box widget (searchable select with "All")
+  // ---------------------------------------------------------------
+  function makeCombo(opts) {
+    var root = opts.root;
+    var input = root.querySelector('input');
+    var list = root.querySelector('.combo-list');
+    var current = opts.value || 'all';
+
+    function labelFor(val) {
+      if (val === 'all') return opts.allLabel;
+      var f = opts.options.filter(function (o) { return o.value === val; })[0];
+      return f ? f.label : val;
+    }
+    function renderList(filterText) {
+      var q = (filterText || '').toLowerCase();
+      var html = '';
+      if (!q || opts.allLabel.toLowerCase().indexOf(q) !== -1) {
+        html += '<div class="all-opt" data-value="all">' + esc(opts.allLabel) + '</div>';
+      }
+      var matches = opts.options.filter(function (o) { return !q || o.label.toLowerCase().indexOf(q) !== -1; });
+      if (matches.length === 0 && html === '') html += '<div class="empty">No matches</div>';
+      matches.forEach(function (o) { html += '<div data-value="' + esc(o.value) + '">' + esc(o.label) + '</div>'; });
+      list.innerHTML = html;
+    }
+    function open() {
+      renderList(input.value === labelFor(current) ? '' : input.value);
+      list.classList.add('open');
+    }
+    function close() {
+      list.classList.remove('open');
+      input.value = labelFor(current);
+    }
+    function selectValue(val) {
+      current = val;
+      input.value = labelFor(val);
+      list.classList.remove('open');
+      opts.onChange(val);
+    }
+
+    input.value = labelFor(current);
+    input.addEventListener('focus', function () { input.value = ''; open(); });
+    input.addEventListener('input', function () { renderList(input.value); list.classList.add('open'); });
+    input.addEventListener('blur', function () { setTimeout(close, 150); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(); input.blur(); }
+      if (e.key === 'Enter') {
+        var first = list.querySelector('div[data-value]');
+        if (first) selectValue(first.getAttribute('data-value'));
+      }
+    });
+    list.addEventListener('mousedown', function (e) {
+      var t = e.target.closest('div[data-value]');
+      if (t) selectValue(t.getAttribute('data-value'));
+    });
+
+    return {
+      setValue: function (val) { current = val; input.value = labelFor(val); },
+      refreshOptions: function (options) { opts.options = options; }
+    };
+  }
+
+  // =================================================================
+  // Report factory — one instance per tab (Model / IFC)
+  // =================================================================
+  function createReport(cfg) {
+    var p = cfg.prefix;                 // 'model' | 'ifc'
+    var CHECKS = cfg.checks;
+    var ELEMENTS = cfg.elements || [];
+    var FILES = cfg.files;
+    var DISCIPLINES = cfg.disciplines;
+    var ITEM_ORDER = cfg.itemOrder;
+    var hasDetails = !!cfg.hasDetails;
+    var reportLabel = cfg.reportLabel;   // 'Model_Quality' | 'IFC_Quality'
+
+    function id(suffix) { return document.getElementById(p + '-' + suffix); }
+
+    var FILE_INFO = {};
+    FILES.forEach(function (f) { FILE_INFO[f.file] = f; });
+    var DISC_LABELS = {};
+    FILES.forEach(function (f) { DISC_LABELS[f.discipline] = f.disciplineLabel; });
+
+    var ELEMENTS_BY_KEY = {};
+    ELEMENTS.forEach(function (e) {
+      var k = e.file + '||' + e.checkId;
+      (ELEMENTS_BY_KEY[k] = ELEMENTS_BY_KEY[k] || []).push(e);
+    });
+
+    var state = {
+      file: 'all', discipline: 'all', result: 'all',
+      itemFilter: '', detailQuery: '',
+      sort: 'none', itemSort: 'none'
+    };
+    var expandedFiles = {};
+
+    function baseFilteredChecks() {
+      return CHECKS.filter(function (c) {
+        if (state.file !== 'all' && c.file !== state.file) return false;
+        if (state.discipline !== 'all') {
+          var info = FILE_INFO[c.file];
+          if (!info || info.discipline !== state.discipline) return false;
+        }
+        return true;
+      });
+    }
+
+    // ---------------- pills ----------------
+    function renderPills() {
+      var wrap = id('active-pills');
+      var pills = [];
+      if (state.file !== 'all') pills.push({ k: 'file', label: 'File: ' + state.file });
+      if (state.discipline !== 'all') pills.push({ k: 'discipline', label: 'Discipline: ' + (DISC_LABELS[state.discipline] || state.discipline) });
+      if (state.result !== 'all') pills.push({ k: 'result', label: 'Result: ' + state.result });
+      if (hasDetails && state.itemFilter) pills.push({ k: 'itemFilter', label: 'Item: ' + state.itemFilter });
+      if (hasDetails && state.detailQuery) pills.push({ k: 'detailQuery', label: 'Search: "' + state.detailQuery + '"' });
+
+      wrap.innerHTML = pills.map(function (pl) {
+        return '<span class="pill" data-k="' + pl.k + '">' + esc(pl.label) + ' <button type="button" aria-label="remove">✕</button></span>';
+      }).join('');
+
+      wrap.querySelectorAll('.pill button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var k = btn.parentElement.getAttribute('data-k');
+          if (k === 'file') { state.file = 'all'; fileCombo.setValue('all'); }
+          if (k === 'discipline') { state.discipline = 'all'; discCombo.setValue('all'); }
+          if (k === 'result') { state.result = 'all'; resultCombo.setValue('all'); }
+          if (k === 'itemFilter') { state.itemFilter = ''; }
+          if (k === 'detailQuery') { state.detailQuery = ''; id('detail-search').value = ''; }
+          renderAll();
+        });
+      });
+    }
+
+    // ---------------- summary ----------------
+    function renderSummary(list) {
+      var s = computeStats(list);
+      var colors = pctColorClass(s.pct);
+      var el = id('summary-cards');
+      var R = 40, C = 2 * Math.PI * R;
+      var frac = s.pct === null ? 0 : Math.min(1, s.pct / 100);
+      var dash = (frac * C).toFixed(1) + ' ' + C.toFixed(1);
+      var filesInScope = {};
+      list.forEach(function (c) { filesInScope[c.file] = true; });
+      var nFiles = Object.keys(filesInScope).length;
+
+      el.innerHTML =
+        '<div class="card hero-card">' +
+          '<div class="ring-wrap">' +
+            '<svg width="92" height="92" viewBox="0 0 100 100">' +
+              '<circle class="ring-bg" cx="50" cy="50" r="' + R + '" fill="none" stroke-width="10"></circle>' +
+              '<circle cx="50" cy="50" r="' + R + '" fill="none" stroke-width="10" stroke="' + colors.ring + '" ' +
+                'stroke-dasharray="' + dash + '" stroke-linecap="round"></circle>' +
+            '</svg>' +
+            '<div class="ring-num ' + colors.text + '">' + (s.pct === null ? '—' : ringLabel(s.pct)) + '</div>' +
+          '</div>' +
+          '<div class="hero-text">' +
+            '<div class="label">Overall % Compliance</div>' +
+            '<div class="big">Based on ' + s.evaluated + ' Pass/Fail evaluations</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card"><div class="label">Files in scope</div><div class="stat-num">' + nFiles + '</div><div class="stat-foot">of ' + FILES.length + ' total files</div></div>' +
+        '<div class="card"><div class="label">Pass</div><div class="stat-num c-pass">' + s.pass + '</div><div class="stat-foot">passed checks</div></div>' +
+        '<div class="card"><div class="label">Fail</div><div class="stat-num c-fail">' + s.fail + '</div><div class="stat-foot">failed checks</div></div>' +
+        '<div class="card"><div class="label">N/A</div><div class="stat-num c-na">' + s.na + '</div><div class="stat-foot">not applicable / not evaluated</div></div>';
+    }
+
+    // ---------------- summary by item ----------------
+    function renderItemsTable(list) {
+      var byName = {};
+      list.forEach(function (c) { (byName[c.name] = byName[c.name] || []).push(c); });
+
+      var q = (id('item-search').value || '').toLowerCase();
+      var rows = ITEM_ORDER.filter(function (name) { return byName[name]; })
+        .filter(function (name) { return !q || name.toLowerCase().indexOf(q) !== -1; });
+
+      var itemStats = {};
+      rows.forEach(function (name) { itemStats[name] = computeStats(byName[name]); });
+
+      if (state.itemSort === 'desc' || state.itemSort === 'asc') {
+        rows.sort(function (a, b) {
+          var pa = itemStats[a].pct, pb = itemStats[b].pct;
+          if (pa === null && pb === null) return 0;
+          if (pa === null) return 1;
+          if (pb === null) return -1;
+          return state.itemSort === 'desc' ? (pb - pa) : (pa - pb);
+        });
+      }
+
+      var body = id('items-tbody');
+      if (rows.length === 0) {
+        id('items-table-scroll').style.display = 'none';
+        id('items-empty').style.display = 'block';
+        return;
+      }
+      id('items-table-scroll').style.display = 'block';
+      id('items-empty').style.display = 'none';
+
+      body.innerHTML = rows.map(function (name) {
+        var s = itemStats[name];
+        var colors = pctColorClass(s.pct);
+        var active = (hasDetails && state.itemFilter === name) ? ' active-row' : '';
+        var width = s.pct === null ? 0 : Math.max(2, s.pct);
+        return '<tr class="' + active.trim() + '" data-name="' + esc(name) + '"' + (hasDetails ? '' : ' style="cursor:default"') + '>' +
+          '<td class="item-name">' + esc(name) + '</td>' +
+          '<td class="num c-pass">' + s.pass + '</td>' +
+          '<td class="num c-fail">' + s.fail + '</td>' +
+          '<td class="num c-na">' + s.na + '</td>' +
+          '<td><div class="pct-cell">' +
+            '<div class="pct-bar-track"><div class="pct-bar-fill ' + (colors.bg || 'bg-red') + '" style="width:' + width + '%"></div></div>' +
+            '<div class="pct-num ' + colors.text + '">' + fmtPct(s.pct) + '</div>' +
+          '</div></td>' +
+        '</tr>';
+      }).join('');
+
+      if (hasDetails) {
+        body.querySelectorAll('tr').forEach(function (tr) {
+          tr.addEventListener('click', function () {
+            var name = tr.getAttribute('data-name');
+            state.itemFilter = (state.itemFilter === name) ? '' : name;
+            renderAll();
+            if (state.itemFilter) id('details-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
+      }
+    }
+
+    // ---------------- details by item (only when hasDetails) ----------------
+    function renderElementsTable(els) {
+      if (!els || els.length === 0) return '';
+      var cols = cfg.elementColumns;
+      var head = cols.map(function (c) { return '<th>' + esc(c.label) + '</th>'; }).join('');
+      var rows = els.slice(0, 500).map(function (e) {
+        return '<tr>' + cols.map(function (c) { return '<td>' + esc(e[c.key]) + '</td>'; }).join('') + '</tr>';
+      }).join('');
+      var more = els.length > 500 ? '<div style="padding:6px 10px;font-size:11.5px;color:var(--grey-300)">Showing 500 of ' + els.length + ' elements</div>' : '';
+      return '<div class="el-table-wrap"><table class="elements">' +
+        '<thead><tr>' + head + '</tr></thead>' +
+        '<tbody>' + rows + '</tbody></table></div>' + more;
+    }
+
+    function renderDetails(list) {
+      if (!hasDetails) return;
+      var q = (state.detailQuery || '').toLowerCase();
+      var filtered = list.filter(function (c) {
+        if (state.result !== 'all' && c.result !== state.result) return false;
+        if (state.itemFilter && c.name !== state.itemFilter) return false;
+        if (q) {
+          var hay = (c.name + ' ' + c.desc + ' ' + c.resultMsg + ' ' + c.failMsg).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+
+      var byFile = {};
+      filtered.forEach(function (c) { (byFile[c.file] = byFile[c.file] || []).push(c); });
+      var fileNames = Object.keys(byFile);
+      var fileStats = {};
+      fileNames.forEach(function (fname) { fileStats[fname] = computeStats(byFile[fname]); });
+
+      if (state.sort === 'desc' || state.sort === 'asc') {
+        fileNames.sort(function (a, b) {
+          var pa = fileStats[a].pct, pb = fileStats[b].pct;
+          if (pa === null && pb === null) return a.localeCompare(b);
+          if (pa === null) return 1;
+          if (pb === null) return -1;
+          return state.sort === 'desc' ? (pb - pa) : (pa - pb);
+        });
+      } else {
+        fileNames.sort();
+      }
+
+      var container = id('details-wrap');
+      if (fileNames.length === 0) {
+        container.innerHTML = '<div class="table-empty">No results match the current filters.</div>';
+        return;
+      }
+      if (fileNames.length === 1) expandedFiles[fileNames[0]] = true;
+
+      container.innerHTML = fileNames.map(function (fname) {
+        var checksForFile = byFile[fname];
+        var s = fileStats[fname];
+        var colors = pctColorClass(s.pct);
+        var info = FILE_INFO[fname] || {};
+        var isOpen = !!expandedFiles[fname];
+
+        var cardsHtml = checksForFile.map(function (c) {
+          var key = c.file + '||' + c.checkId;
+          var els = ELEMENTS_BY_KEY[key];
+          var resClass = c.result === 'Pass' ? 'res-pass' : (c.result === 'Fail' ? 'res-fail' : 'res-na');
+          var extraBits = [];
+          if (c.resultMsg) extraBits.push('<div class="chk-extra">' + esc(c.resultMsg) + '</div>');
+          if (c.failMsg) extraBits.push('<div class="chk-extra"><b>Detail: </b>' + esc(c.failMsg) + '</div>');
+          if (c.error) extraBits.push('<div class="chk-extra"><b>Error: </b>' + esc(c.error) + '</div>');
+          var countBadge = (c.count !== null && c.count !== undefined && c.count !== '') ? '<span class="chk-count">Count: ' + esc(c.count) + '</span>' : '';
+          return '<div class="check-card ' + resClass + '">' +
+            '<div class="chk-icon">' + iconSvg(c.result) + '</div>' +
+            '<div>' +
+              '<div class="chk-name">' + esc(c.name) + '</div>' +
+              (c.desc ? '<div class="chk-desc">' + esc(c.desc) + '</div>' : '') +
+              extraBits.join('') +
+              countBadge +
+              renderElementsTable(els) +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        return '<div class="file-group' + (isOpen ? ' open' : '') + '" data-file="' + esc(fname) + '">' +
+          '<div class="file-group-head">' +
+            '<div class="fg-left">' +
+              '<span class="fg-caret">▶</span>' +
+              '<span class="fg-disc">' + esc(info.discipline || '') + '</span>' +
+              '<span class="fg-name">' + esc(fname) + '</span>' +
+            '</div>' +
+            '<div class="fg-right">' +
+              '<span>P ' + s.pass + ' &nbsp;·&nbsp; F ' + s.fail + ' &nbsp;·&nbsp; NA ' + s.na + '</span>' +
+              '<span class="fg-pct ' + colors.text + '">' + fmtPct(s.pct) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="file-group-body">' + cardsHtml + '</div>' +
+        '</div>';
+      }).join('');
+
+      container.querySelectorAll('.file-group-head').forEach(function (head) {
+        head.addEventListener('click', function () {
+          var group = head.parentElement;
+          var fname = group.getAttribute('data-file');
+          expandedFiles[fname] = !expandedFiles[fname];
+          group.classList.toggle('open', expandedFiles[fname]);
+        });
+      });
+    }
+
+    function renderAll() {
+      var list = baseFilteredChecks();
+      renderPills();
+      renderSummary(list);
+      renderItemsTable(list);
+      renderDetails(list);
+    }
+
+    // ---------------- combos ----------------
+    var fileOptions = FILES.map(function (f) { return { value: f.file, label: f.file }; });
+    var fileCombo = makeCombo({
+      root: id('file-combo'), options: fileOptions, allLabel: 'All files', value: 'all',
+      onChange: function (v) { state.file = v; renderAll(); }
+    });
+    var discOptions = DISCIPLINES.map(function (d) { var lbl = DISC_LABELS[d] || d; return { value: d, label: lbl === d ? d : lbl + ' (' + d + ')' }; });
+    var discCombo = makeCombo({
+      root: id('discipline-combo'), options: discOptions, allLabel: 'All disciplines', value: 'all',
+      onChange: function (v) { state.discipline = v; renderAll(); }
+    });
+    var resultOptions = [{ value: 'Pass', label: 'Pass' }, { value: 'Fail', label: 'Fail' }, { value: 'NA', label: 'N/A' }];
+    var resultCombo = makeCombo({
+      root: id('result-combo'), options: resultOptions, allLabel: 'All results', value: 'all',
+      onChange: function (v) { state.result = v; renderAll(); }
+    });
+
+    id('reset-filters').addEventListener('click', function () {
+      state = { file: 'all', discipline: 'all', result: 'all', itemFilter: '', detailQuery: '', sort: 'none', itemSort: 'none' };
+      fileCombo.setValue('all'); discCombo.setValue('all'); resultCombo.setValue('all');
+      id('item-search').value = '';
+      if (hasDetails) id('detail-search').value = '';
+      setItemSortButtons('none');
+      if (hasDetails) setSortButtons('none');
+      renderAll();
+    });
+
+    id('item-search').addEventListener('input', function () { renderItemsTable(baseFilteredChecks()); });
+
+    function setItemSortButtons(mode) {
+      id('item-sort-none').classList.toggle('active', mode === 'none');
+      id('item-sort-desc').classList.toggle('active', mode === 'desc');
+      id('item-sort-asc').classList.toggle('active', mode === 'asc');
+    }
+    id('item-sort-none').addEventListener('click', function () { state.itemSort = 'none'; setItemSortButtons('none'); renderItemsTable(baseFilteredChecks()); });
+    id('item-sort-desc').addEventListener('click', function () { state.itemSort = 'desc'; setItemSortButtons('desc'); renderItemsTable(baseFilteredChecks()); });
+    id('item-sort-asc').addEventListener('click', function () { state.itemSort = 'asc'; setItemSortButtons('asc'); renderItemsTable(baseFilteredChecks()); });
+
+    var setSortButtons = function () {}; // no-op default when this tab has no Details section
+
+    if (hasDetails) {
+      id('detail-search').addEventListener('input', function (e) {
+        state.detailQuery = e.target.value;
+        renderPills();
+        renderDetails(baseFilteredChecks());
+      });
+      id('expand-all').addEventListener('click', function () {
+        Object.keys(FILE_INFO).forEach(function (f) { expandedFiles[f] = true; });
+        document.querySelectorAll('#' + p + '-details-wrap .file-group').forEach(function (g) { g.classList.add('open'); });
+      });
+      id('collapse-all').addEventListener('click', function () {
+        Object.keys(FILE_INFO).forEach(function (f) { expandedFiles[f] = false; });
+        document.querySelectorAll('#' + p + '-details-wrap .file-group').forEach(function (g) { g.classList.remove('open'); });
+      });
+      setSortButtons = function (mode) {
+        id('sort-none').classList.toggle('active', mode === 'none');
+        id('sort-desc').classList.toggle('active', mode === 'desc');
+        id('sort-asc').classList.toggle('active', mode === 'asc');
+      };
+      id('sort-none').addEventListener('click', function () { state.sort = 'none'; setSortButtons('none'); renderDetails(baseFilteredChecks()); });
+      id('sort-desc').addEventListener('click', function () { state.sort = 'desc'; setSortButtons('desc'); renderDetails(baseFilteredChecks()); });
+      id('sort-asc').addEventListener('click', function () { state.sort = 'asc'; setSortButtons('asc'); renderDetails(baseFilteredChecks()); });
+    }
+
+
+    // ---------------- export ----------------
+    function buildSummaryByItem(list) {
+      var byName = {};
+      list.forEach(function (c) { (byName[c.name] = byName[c.name] || []).push(c); });
+      return ITEM_ORDER.filter(function (name) { return byName[name]; }).map(function (name) {
+        var s = computeStats(byName[name]);
+        return {
+          name: name, pass: s.pass, fail: s.fail, na: s.na, evaluated: s.evaluated,
+          pctCompliance: s.pct === null ? null : Math.round(s.pct * 10) / 10
+        };
+      });
+    }
+    function checksWithElements(list) {
+      return list.map(function (c) {
+        var out = {
+          file: c.file, checkId: c.checkId, name: c.name, description: c.desc,
+          result: c.result, resultMessage: c.resultMsg, failureMessage: c.failMsg,
+          error: c.error, count: c.count, value: c.value
+        };
+        if (hasDetails) {
+          var key = c.file + '||' + c.checkId;
+          out.elements = (ELEMENTS_BY_KEY[key] || []).map(function (e) {
+            var eo = {};
+            cfg.elementColumns.forEach(function (col) { eo[col.key] = e[col.key]; });
+            if (e.count !== undefined) eo.count = e.count;
+            return eo;
+          });
+        }
+        return out;
+      });
+    }
+    function filesSummary(list) {
+      var byFile = {};
+      list.forEach(function (c) { (byFile[c.file] = byFile[c.file] || []).push(c); });
+      return Object.keys(byFile).sort().map(function (fname) {
+        var s = computeStats(byFile[fname]);
+        var info = FILE_INFO[fname] || {};
+        return {
+          file: fname, discipline: info.discipline || null, disciplineLabel: info.disciplineLabel || null,
+          pass: s.pass, fail: s.fail, na: s.na, evaluated: s.evaluated,
+          pctCompliance: s.pct === null ? null : Math.round(s.pct * 10) / 10
+        };
+      });
+    }
+
+    function exportFullReport() {
+      var summary = computeStats(CHECKS);
+      var payload = {
+        exportType: 'full_report',
+        reportType: reportLabel,
+        generatedAt: new Date().toISOString(),
+        meta: META,
+        files: filesSummary(CHECKS),
+        disciplines: DISCIPLINES,
+        checkItems: ITEM_ORDER,
+        overview: {
+          filesCount: FILES.length, pass: summary.pass, fail: summary.fail, na: summary.na,
+          evaluated: summary.evaluated, pctCompliance: summary.pct === null ? null : Math.round(summary.pct * 10) / 10
+        },
+        summaryByItem: buildSummaryByItem(CHECKS),
+        checks: checksWithElements(CHECKS)
+      };
+      triggerDownload(payload, cfg.taskNameSlug + '_' + reportLabel + '_full_report_' + timestampSlug() + '.json');
+      showToast(cfg.reportTitle + ': full report exported');
+    }
+
+    function exportCurrentView() {
+      var base = baseFilteredChecks();
+      var q = (state.detailQuery || '').toLowerCase();
+      var detailChecks = base.filter(function (c) {
+        if (state.result !== 'all' && c.result !== state.result) return false;
+        if (hasDetails && state.itemFilter && c.name !== state.itemFilter) return false;
+        if (hasDetails && q) {
+          var hay = (c.name + ' ' + c.desc + ' ' + c.resultMsg + ' ' + c.failMsg).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+
+      var itemSearchText = id('item-search').value || '';
+      var summaryByItemList = buildSummaryByItem(base).filter(function (row) {
+        return !itemSearchText || row.name.toLowerCase().indexOf(itemSearchText.toLowerCase()) !== -1;
+      });
+      if (state.itemSort === 'desc' || state.itemSort === 'asc') {
+        summaryByItemList.sort(function (a, b) {
+          if (a.pctCompliance === null && b.pctCompliance === null) return 0;
+          if (a.pctCompliance === null) return 1;
+          if (b.pctCompliance === null) return -1;
+          return state.itemSort === 'desc' ? (b.pctCompliance - a.pctCompliance) : (a.pctCompliance - b.pctCompliance);
+        });
+      }
+
+      var overviewStats = computeStats(base);
+      var filesInView = filesSummary(detailChecks);
+      if (hasDetails && (state.sort === 'desc' || state.sort === 'asc')) {
+        filesInView.sort(function (a, b) {
+          if (a.pctCompliance === null && b.pctCompliance === null) return a.file.localeCompare(b.file);
+          if (a.pctCompliance === null) return 1;
+          if (b.pctCompliance === null) return -1;
+          return state.sort === 'desc' ? (b.pctCompliance - a.pctCompliance) : (a.pctCompliance - b.pctCompliance);
+        });
+      }
+
+      var payload = {
+        exportType: 'filtered_view',
+        reportType: reportLabel,
+        generatedAt: new Date().toISOString(),
+        meta: META,
+        filtersApplied: {
+          file: state.file === 'all' ? 'All files' : state.file,
+          discipline: state.discipline === 'all' ? 'All disciplines' : (DISC_LABELS[state.discipline] || state.discipline),
+          result: state.result === 'all' ? 'All results' : state.result,
+          itemFilter: hasDetails ? (state.itemFilter || null) : null,
+          detailSearchText: hasDetails ? (state.detailQuery || null) : null,
+          summaryItemSearchText: itemSearchText || null,
+          summaryByItemSort: state.itemSort,
+          detailsGroupSort: hasDetails ? state.sort : null
+        },
+        overview: {
+          filesInScope: filesInView.length, pass: overviewStats.pass, fail: overviewStats.fail, na: overviewStats.na,
+          evaluated: overviewStats.evaluated, pctCompliance: overviewStats.pct === null ? null : Math.round(overviewStats.pct * 10) / 10
+        },
+        summaryByItem: summaryByItemList,
+        filesInView: filesInView,
+        checks: checksWithElements(detailChecks)
+      };
+      triggerDownload(payload, cfg.taskNameSlug + '_' + reportLabel + '_filtered_view_' + timestampSlug() + '.json');
+      showToast(cfg.reportTitle + ': current view exported');
+    }
+
+    var exportMenu = id('export-menu');
+    id('export-toggle').addEventListener('click', function (e) {
+      e.stopPropagation();
+      exportMenu.classList.toggle('open');
+    });
+    exportMenu.addEventListener('click', function (e) {
+      var t = e.target.closest('div[data-action]');
+      if (!t) return;
+      exportMenu.classList.remove('open');
+      if (t.getAttribute('data-action') === 'full') exportFullReport();
+      else exportCurrentView();
+    });
+    document.addEventListener('click', function (e) {
+      if (!id('export-dropdown').contains(e.target)) exportMenu.classList.remove('open');
+    });
+
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll('#' + p + '-file-combo .combo-list.open, #' + p + '-discipline-combo .combo-list.open, #' + p + '-result-combo .combo-list.open').forEach(function (list) {
+        if (!list.parentElement.contains(e.target)) list.classList.remove('open');
+      });
+    });
+
+    renderAll();
+  }
+
+  // =================================================================
+  // Reviewer Responses tab — consolidated exports from the Revit /
+  // Civil 3D plugin (status + free-text response per reviewed Fail item).
+  // =================================================================
+  var STATUS_ORDER = ['Pending', 'In review', 'Corrected', 'Justified', 'Not applicable'];
+
+  function statusClass(status) {
+    var s = (status || 'Pending').toLowerCase().replace(/\s+/g, '-');
+    if (s === 'corrected') return 'status-corrected';
+    if (s === 'justified') return 'status-justified';
+    if (s === 'in-review') return 'status-in-review';
+    if (s === 'not-applicable') return 'status-na';
+    return 'status-pending';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return esc(iso);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+
+  function createResponsesView(cfg) {
+    var ALL = cfg.responses;
+    var state = { report: 'all', file: 'all', item: 'all', status: 'all', reviewer: 'all', query: '', sort: 'newest' };
+
+    function id(s) { return document.getElementById('resp-' + s); }
+
+    function uniqueSorted(list) { return Array.from(new Set(list)).filter(Boolean).sort(); }
+
+    var fileOptions = uniqueSorted(ALL.map(function (r) { return r.file; })).map(function (f) { return { value: f, label: f }; });
+    var itemOptions = uniqueSorted(ALL.map(function (r) { return r.item; })).map(function (it) { return { value: it, label: it }; });
+    var reviewerOptions = uniqueSorted(ALL.map(function (r) { return r.reviewer; })).map(function (rv) { return { value: rv, label: rv }; });
+    var statusOptions = STATUS_ORDER.filter(function (s) { return ALL.some(function (r) { return r.status === s; }); })
+      .concat(uniqueSorted(ALL.map(function (r) { return r.status; })).filter(function (s) { return STATUS_ORDER.indexOf(s) === -1; }))
+      .map(function (s) { return { value: s, label: s }; });
+    var reportOptions = [{ value: 'model', label: 'Model Quality' }, { value: 'ifc', label: 'IFC Quality' }];
+
+    var reportCombo = makeCombo({ root: id('report-combo'), options: reportOptions, allLabel: 'All reports', value: 'all', onChange: function (v) { state.report = v; renderAll(); } });
+    var fileCombo = makeCombo({ root: id('file-combo'), options: fileOptions, allLabel: 'All models', value: 'all', onChange: function (v) { state.file = v; renderAll(); } });
+    var itemCombo = makeCombo({ root: id('item-combo'), options: itemOptions, allLabel: 'All items', value: 'all', onChange: function (v) { state.item = v; renderAll(); } });
+    var statusCombo = makeCombo({ root: id('status-combo'), options: statusOptions, allLabel: 'All statuses', value: 'all', onChange: function (v) { state.status = v; renderAll(); } });
+    var reviewerCombo = makeCombo({ root: id('reviewer-combo'), options: reviewerOptions, allLabel: 'All reviewers', value: 'all', onChange: function (v) { state.reviewer = v; renderAll(); } });
+
+    function filtered() {
+      var q = state.query.toLowerCase();
+      return ALL.filter(function (r) {
+        if (state.report !== 'all' && r.reportType !== state.report) return false;
+        if (state.file !== 'all' && r.file !== state.file) return false;
+        if (state.item !== 'all' && r.item !== state.item) return false;
+        if (state.status !== 'all' && r.status !== state.status) return false;
+        if (state.reviewer !== 'all' && r.reviewer !== state.reviewer) return false;
+        if (q) {
+          var hay = (r.item + ' ' + r.file + ' ' + r.response + ' ' + r.failureMessage + ' ' + r.reviewer).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      }).sort(function (a, b) {
+        var ta = a.reviewedAt || a.exportedAt || '';
+        var tb = b.reviewedAt || b.exportedAt || '';
+        return state.sort === 'newest' ? (tb < ta ? -1 : tb > ta ? 1 : 0) : (ta < tb ? -1 : ta > tb ? 1 : 0);
+      });
+    }
+
+    function renderPills() {
+      var pills = [];
+      if (state.report !== 'all') pills.push({ k: 'report', label: 'Report: ' + (state.report === 'ifc' ? 'IFC Quality' : 'Model Quality') });
+      if (state.file !== 'all') pills.push({ k: 'file', label: 'Model: ' + state.file });
+      if (state.item !== 'all') pills.push({ k: 'item', label: 'Item: ' + state.item });
+      if (state.status !== 'all') pills.push({ k: 'status', label: 'Status: ' + state.status });
+      if (state.reviewer !== 'all') pills.push({ k: 'reviewer', label: 'Reviewer: ' + state.reviewer });
+      if (state.query) pills.push({ k: 'query', label: 'Search: "' + state.query + '"' });
+
+      id('active-pills').innerHTML = pills.map(function (p) {
+        return '<span class="pill" data-k="' + p.k + '">' + esc(p.label) + ' <button type="button" aria-label="remove">✕</button></span>';
+      }).join('');
+      id('active-pills').querySelectorAll('.pill button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var k = btn.parentElement.getAttribute('data-k');
+          if (k === 'report') { state.report = 'all'; reportCombo.setValue('all'); }
+          if (k === 'file') { state.file = 'all'; fileCombo.setValue('all'); }
+          if (k === 'item') { state.item = 'all'; itemCombo.setValue('all'); }
+          if (k === 'status') { state.status = 'all'; statusCombo.setValue('all'); }
+          if (k === 'reviewer') { state.reviewer = 'all'; reviewerCombo.setValue('all'); }
+          if (k === 'query') { state.query = ''; id('search').value = ''; }
+          renderAll();
+        });
+      });
+    }
+
+    function renderSummary(list) {
+      var counts = {};
+      STATUS_ORDER.forEach(function (s) { counts[s] = 0; });
+      list.forEach(function (r) { counts[r.status] = (counts[r.status] || 0) + 1; });
+      var reviewers = uniqueSorted(list.map(function (r) { return r.reviewer; }));
+      var models = uniqueSorted(list.map(function (r) { return r.file; }));
+
+      var extraStatuses = Object.keys(counts).filter(function (s) { return STATUS_ORDER.indexOf(s) === -1; });
+      var statusCards = STATUS_ORDER.concat(extraStatuses).map(function (s) {
+        return '<div class="card"><div class="label">' + esc(s) + '</div><div class="stat-num">' + (counts[s] || 0) + '</div></div>';
+      }).join('');
+
+      id('summary-cards').innerHTML =
+        '<div class="card"><div class="label">Total responses</div><div class="stat-num">' + list.length + '</div><div class="stat-foot">of ' + ALL.length + ' total</div></div>' +
+        statusCards +
+        '<div class="card"><div class="label">Reviewers</div><div class="stat-num">' + reviewers.length + '</div></div>' +
+        '<div class="card"><div class="label">Models covered</div><div class="stat-num">' + models.length + '</div></div>';
+    }
+
+    function renderTable(list) {
+      var body = id('tbody');
+      if (list.length === 0) {
+        id('table-scroll').style.display = 'none';
+        id('empty').style.display = 'block';
+        id('empty').textContent = ALL.length === 0 ? 'No reviewer responses have been loaded yet.' : 'No responses match the current filters.';
+        return;
+      }
+      id('table-scroll').style.display = 'block';
+      id('empty').style.display = 'none';
+
+      body.innerHTML = list.map(function (r, i) {
+        var respText = r.response ? esc(r.response) : '<span style="color:var(--grey-300)">—</span>';
+        return '<tr data-i="' + i + '">' +
+          '<td><span class="report-tag ' + (r.reportType === 'ifc' ? 'ifc' : 'model') + '">' + (r.reportType === 'ifc' ? 'IFC' : 'Model') + '</span></td>' +
+          '<td class="resp-file">' + esc(r.file) + '<div style="margin-top:3px"><span class="fg-disc" style="background:var(--duck)">' + esc(r.discipline || '') + '</span></div></td>' +
+          '<td class="resp-item">' + esc(r.item) + '</td>' +
+          '<td><span class="status-badge ' + statusClass(r.status) + '"><i></i>' + esc(r.status) + '</span></td>' +
+          '<td class="resp-text"><div class="clamp">' + respText + '</div>' +
+            (r.failureMessage ? '<div class="resp-fail-msg">Fail: ' + esc(r.failureMessage) + '</div>' : '') +
+            '<div class="resp-more">Click to ' + (r.response && r.response.length > 90 ? 'expand' : 'see detail') + '</div></td>' +
+          '<td class="resp-reviewer">' + esc(r.reviewer) + '<div style="color:var(--grey-300);font-size:11px">' + esc(r.reviewSoftware) + '</div></td>' +
+          '<td class="resp-date">' + fmtDate(r.reviewedAt) + '</td>' +
+        '</tr>';
+      }).join('');
+
+      body.querySelectorAll('tr').forEach(function (tr) {
+        tr.addEventListener('click', function () { tr.classList.toggle('expanded'); });
+      });
+    }
+
+    function renderAll() {
+      var list = filtered();
+      renderPills();
+      renderSummary(list);
+      renderTable(list);
+    }
+
+    id('search').addEventListener('input', function (e) { state.query = e.target.value; renderPills(); renderTable(filtered()); });
+
+    function setSortButtons(mode) {
+      id('sort-newest').classList.toggle('active', mode === 'newest');
+      id('sort-oldest').classList.toggle('active', mode === 'oldest');
+    }
+    id('sort-newest').addEventListener('click', function () { state.sort = 'newest'; setSortButtons('newest'); renderTable(filtered()); });
+    id('sort-oldest').addEventListener('click', function () { state.sort = 'oldest'; setSortButtons('oldest'); renderTable(filtered()); });
+
+    id('reset-filters').addEventListener('click', function () {
+      state = { report: 'all', file: 'all', item: 'all', status: 'all', reviewer: 'all', query: '', sort: 'newest' };
+      reportCombo.setValue('all'); fileCombo.setValue('all'); itemCombo.setValue('all'); statusCombo.setValue('all'); reviewerCombo.setValue('all');
+      id('search').value = '';
+      setSortButtons('newest');
+      renderAll();
+    });
+
+    var exportMenu = id('export-menu');
+    id('export-toggle').addEventListener('click', function (e) { e.stopPropagation(); exportMenu.classList.toggle('open'); });
+    exportMenu.addEventListener('click', function (e) {
+      var t = e.target.closest('div[data-action]');
+      if (!t) return;
+      exportMenu.classList.remove('open');
+      var list = t.getAttribute('data-action') === 'full' ? ALL : filtered();
+      triggerDownload(list, cfg.taskNameSlug + '_Reviewer_Responses_' + (t.getAttribute('data-action') === 'full' ? 'all' : 'filtered') + '_' + timestampSlug() + '.json');
+      showToast('Reviewer Responses: ' + (t.getAttribute('data-action') === 'full' ? 'all responses' : 'current view') + ' exported');
+    });
+    document.addEventListener('click', function (e) {
+      if (!id('export-dropdown').contains(e.target)) exportMenu.classList.remove('open');
+      document.querySelectorAll('#panel-responses .combo-list.open').forEach(function (list) {
+        if (!list.parentElement.contains(e.target)) list.classList.remove('open');
+      });
+    });
+
+    renderAll();
+  }
+
+  var taskNameSlug = slugify(META.taskName);
+
+  // Element tables are dictionary-encoded to keep the embedded JSON small.
+  // Rebuild the plain array of objects the rest of the code expects.
+  function decodeElements(enc) {
+    if (!enc || !enc.r) return [];
+    var fields = enc.f, dicts = enc.d;
+    return enc.r.map(function (row) {
+      var o = {};
+      for (var i = 0; i < fields.length; i++) o[fields[i]] = dicts[i][row[i]];
+      return o;
+    });
+  }
+
+  var MODEL_EL_COLUMNS = [
+    { key: 'category', label: 'Category' },
+    { key: 'family', label: 'Family' },
+    { key: 'type', label: 'Type' },
+    { key: 'name', label: 'Name' },
+    { key: 'value', label: 'Value' },
+    { key: 'elementId', label: 'ID' }
+  ];
+
+  var IFC_EL_COLUMNS = [
+    { key: 'parameter', label: 'Parameter' },
+    { key: 'value', label: 'Value' },
+    { key: 'element', label: 'Element' },
+    { key: 'ifcClass', label: 'IfcClass' },
+    { key: 'globalId', label: 'GlobalId' }
+  ];
+
+  createReport({
+    prefix: 'model',
+    checks: DATA.model.checks,
+    elements: decodeElements(DATA.model.elementsEnc),
+    elementColumns: MODEL_EL_COLUMNS,
+    files: DATA.model.files,
+    disciplines: DATA.model.disciplines,
+    itemOrder: DATA.model.checkNamesOrder,
+    hasDetails: true,
+    reportLabel: 'Model_Quality',
+    reportTitle: 'Model Quality Report',
+    taskNameSlug: taskNameSlug
+  });
+
+  createReport({
+    prefix: 'ifc',
+    checks: DATA.ifc.checks,
+    elements: decodeElements(DATA.ifc.elementsEnc),
+    elementColumns: IFC_EL_COLUMNS,
+    files: DATA.ifc.files,
+    disciplines: DATA.ifc.disciplines,
+    itemOrder: DATA.ifc.checkNamesOrder,
+    hasDetails: true,
+    reportLabel: 'IFC_Quality',
+    reportTitle: 'IFC Quality Report',
+    taskNameSlug: taskNameSlug
+  });
+
+  createResponsesView({
+    responses: DATA.responses || [],
+    taskNameSlug: taskNameSlug
+  });
+
+  // ---------------- tab switcher ----------------
+  var TAB_IDS = ['model', 'ifc', 'responses'];
+  var tabButtons = document.querySelectorAll('.tab-btn');
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var tab = btn.getAttribute('data-tab');
+      tabButtons.forEach(function (b) { b.classList.toggle('active', b === btn); });
+      TAB_IDS.forEach(function (t) {
+        document.getElementById('panel-' + t).style.display = (t === tab) ? '' : 'none';
+      });
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
